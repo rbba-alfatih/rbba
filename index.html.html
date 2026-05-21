@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KidZone - Dunia Seru Anak</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #FF6B6B;
+    --secondary: #FFD93D;
+    --accent: #6BCB77;
+    --blue: #4D96FF;
+    --purple: #C77DFF;
+    --orange: #FF9A3C;
+    --bg: #FFF9F0;
+    --white: #ffffff;
+    --dark: #2D2D2D;
+    --text: #444444;
+    --radius: 20px;
+    --shadow: 0 8px 30px rgba(0,0,0,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .topbar span { margin: 0 12px; }
+
+  /* ===== HEADER ===== */
+  header {
+    background: white;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--secondary);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .logo span { color: var(--blue); }
+
+  /* NAV */
+  nav { display: flex; align-items: center; gap: 4px; }
+  .nav-item {
+    position: relative;
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--dark);
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-item:hover { background: var(--bg); color: var(--primary); }
+  .nav-item.has-dropdown:after {
+    content: " ▾";
+    font-size: 11px;
+    opacity: 0.6;
+  }
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    min-width: 180px;
+    padding: 10px;
+    z-index: 100;
+  }
+  .nav-item:hover .dropdown { display: block; }
+  .dropdown a {
+    display: block;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .dropdown a:hover { background: var(--bg); color: var(--primary); }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border-radius: 50px;
+    padding: 8px 16px;
+    gap: 8px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .search-box:focus-within { border-color: var(--primary); background: white; }
+  .search-box input {
+    border: none; background: none; outline: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 600;
+    width: 160px; color: var(--dark);
+  }
+  .search-box input::placeholder { color: #aaa; }
+  .search-box button {
+    background: none; border: none; cursor: pointer;
+    font-size: 16px; color: var(--primary);
+  }
+
+  /* ===== HERO SLIDER ===== */
+  .slider-section {
+    max-width: 1200px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+  }
+  .slider-wrapper {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    height: 400px;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 48px 60px;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide-1 { background: linear-gradient(135deg, #FF6B6B 0%, #FF9A3C 100%); }
+  .slide-2 { background: linear-gradient(135deg, #4D96FF 0%, #C77DFF 100%); }
+  .slide-3 { background: linear-gradient(135deg, #6BCB77 0%, #FFD93D 100%); }
+
+  .slide-content { flex: 1; color: white; z-index: 2; }
+  .slide-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .slide h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 42px;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    text-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+  }
+  .slide p { font-size: 16px; font-weight: 600; opacity: 0.9; margin-bottom: 24px; }
+  .btn-slide {
+    display: inline-block;
+    background: white;
+    color: var(--primary);
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+  }
+  .slide-2 .btn-slide { color: var(--blue); }
+  .slide-3 .btn-slide { color: var(--accent); }
+  .btn-slide:hover { transform: scale(1.05); }
+
+  .slide-emoji {
+    font-size: 120px;
+    line-height: 1;
+    animation: floatEmoji 3s ease-in-out infinite;
+    filter: drop-shadow(4px 8px 16px rgba(0,0,0,0.2));
+  }
+  @keyframes floatEmoji {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+
+  /* Decorative circles */
+  .slide::before, .slide::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+  .slide::before { width: 300px; height: 300px; top: -100px; right: 200px; }
+  .slide::after { width: 200px; height: 200px; bottom: -80px; left: 40%; }
+
+  .slider-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 8px;
+    z-index: 10;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+  }
+  .dot.active { background: white; transform: scale(1.3); }
+
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.3);
+    border: none;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s;
+  }
+  .slider-btn:hover { background: rgba(255,255,255,0.5); }
+  .slider-btn.prev { left: 16px; }
+  .slider-btn.next { right: 16px; }
+
+  /* ===== CATEGORIES ===== */
+  .section {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 28px;
+    background: var(--primary);
+    border-radius: 4px;
+  }
+  .view-all {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+    padding: 6px 16px;
+    border: 2px solid var(--primary);
+    border-radius: 50px;
+    transition: all 0.2s;
+  }
+  .view-all:hover { background: var(--primary); color: white; }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+  }
+  .cat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    text-decoration: none;
+    color: var(--dark);
+  }
+  .cat-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+  .cat-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+    display: block;
+    animation: wiggle 3s ease-in-out infinite;
+  }
+  .cat-card:nth-child(2) .cat-icon { animation-delay: 0.3s; }
+  .cat-card:nth-child(3) .cat-icon { animation-delay: 0.6s; }
+  .cat-card:nth-child(4) .cat-icon { animation-delay: 0.9s; }
+  .cat-card:nth-child(5) .cat-icon { animation-delay: 1.2s; }
+  .cat-card:nth-child(6) .cat-icon { animation-delay: 1.5s; }
+  @keyframes wiggle {
+    0%,90%,100% { transform: rotate(0); }
+    92% { transform: rotate(-8deg); }
+    96% { transform: rotate(8deg); }
+  }
+  .cat-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--dark);
+  }
+  .cat-count {
+    font-size: 11px;
+    color: #aaa;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* ===== HOT POSTS ===== */
+  .hot-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 20px;
+  }
+  .post-card {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transition: all 0.3s;
+    text-decoration: none;
+    color: var(--dark);
+  }
+  .post-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+  .post-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, #FF6B6B22, #FFD93D44);
+    position: relative;
+    overflow: hidden;
+  }
+  .post-img-placeholder {
+    width: 100%;
+    aspect-ratio: 16/10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+  }
+  .post-card:nth-child(1) .post-img-placeholder { background: linear-gradient(135deg, #FFD93D44, #FF6B6B22); }
+  .post-card:nth-child(2) .post-img-placeholder { background: linear-gradient(135deg, #4D96FF22, #C77DFF33); }
+  .post-card:nth-child(3) .post-img-placeholder { background: linear-gradient(135deg, #6BCB7733, #FFD93D44); }
+
+  .post-body { padding: 18px; }
+  .post-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+    color: white;
+  }
+  .label-red { background: var(--primary); }
+  .label-blue { background: var(--blue); }
+  .label-green { background: var(--accent); }
+  .label-purple { background: var(--purple); }
+  .label-orange { background: var(--orange); }
+  .label-yellow { background: #e6b800; }
+
+  .post-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    color: var(--dark);
+  }
+  .post-card.big .post-title { font-size: 24px; }
+  .post-excerpt {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #aaa;
+    font-weight: 700;
+  }
+  .post-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* HOT badge */
+  .hot-badge {
+    position: relative;
+  }
+  .hot-badge::after {
+    content: '🔥 HOT';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--primary);
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 50px;
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main-layout {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+  }
+
+  /* Posts grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .posts-grid .post-card .post-img-placeholder { font-size: 42px; }
+  .posts-grid .post-card:nth-child(1) .post-img-placeholder { background: linear-gradient(135deg, #FF9A3C33, #FFD93D44); }
+  .posts-grid .post-card:nth-child(2) .post-img-placeholder { background: linear-gradient(135deg, #C77DFF33, #4D96FF22); }
+  .posts-grid .post-card:nth-child(3) .post-img-placeholder { background: linear-gradient(135deg, #6BCB7733, #4D96FF22); }
+  .posts-grid .post-card:nth-child(4) .post-img-placeholder { background: linear-gradient(135deg, #FF6B6B22, #C77DFF33); }
+
+  /* Load more */
+  .load-more-wrap { text-align: center; margin-top: 24px; }
+  .btn-load {
+    display: inline-block;
+    background: white;
+    color: var(--primary);
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    padding: 12px 36px;
+    border-radius: 50px;
+    border: 2px solid var(--primary);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-load:hover { background: var(--primary); color: white; transform: scale(1.03); }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar { display: flex; flex-direction: column; gap: 24px; }
+
+  .widget {
+    background: white;
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .widget-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    color: var(--dark);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 3px dashed #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Search widget */
+  .widget-search {
+    display: flex;
+    gap: 8px;
+  }
+  .widget-search input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .widget-search input:focus { border-color: var(--primary); }
+  .widget-search button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .widget-search button:hover { background: #e05555; }
+
+  /* Popular posts */
+  .popular-list { display: flex; flex-direction: column; gap: 14px; }
+  .popular-item {
+    display: flex;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--dark);
+    transition: all 0.2s;
+  }
+  .popular-item:hover { opacity: 0.8; }
+  .popular-thumb {
+    width: 64px; height: 64px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .popular-item:nth-child(1) .popular-thumb { background: linear-gradient(135deg, #FF6B6B33, #FFD93D44); }
+  .popular-item:nth-child(2) .popular-thumb { background: linear-gradient(135deg, #4D96FF22, #C77DFF33); }
+  .popular-item:nth-child(3) .popular-thumb { background: linear-gradient(135deg, #6BCB7733, #FFD93D44); }
+  .popular-item:nth-child(4) .popular-thumb { background: linear-gradient(135deg, #FF9A3C33, #FF6B6B22); }
+  .popular-item:nth-child(5) .popular-thumb { background: linear-gradient(135deg, #C77DFF33, #4D96FF22); }
+  .popular-info { flex: 1; }
+  .popular-title {
+    font-size: 13px; font-weight: 800;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .popular-date { font-size: 11px; color: #aaa; font-weight: 700; }
+
+  /* Tags */
+  .tags-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 2px solid;
+  }
+  .tag:hover { transform: scale(1.05); }
+  .tag-red { color: var(--primary); border-color: var(--primary); }
+  .tag-red:hover { background: var(--primary); color: white; }
+  .tag-blue { color: var(--blue); border-color: var(--blue); }
+  .tag-blue:hover { background: var(--blue); color: white; }
+  .tag-green { color: var(--accent); border-color: var(--accent); }
+  .tag-green:hover { background: var(--accent); color: white; }
+  .tag-purple { color: var(--purple); border-color: var(--purple); }
+  .tag-purple:hover { background: var(--purple); color: white; }
+  .tag-orange { color: var(--orange); border-color: var(--orange); }
+  .tag-orange:hover { background: var(--orange); color: white; }
+
+  /* Social widget */
+  .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    transition: all 0.2s;
+    color: white;
+  }
+  .social-btn:hover { transform: scale(1.04); opacity: 0.9; }
+  .social-btn.fb { background: #1877F2; }
+  .social-btn.ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+  .social-btn.yt { background: #FF0000; }
+  .social-btn.tw { background: #1DA1F2; }
+  .social-icon { font-size: 20px; }
+  .social-info { line-height: 1.2; }
+  .social-info small { font-weight: 600; opacity: 0.85; font-size: 10px; display: block; }
+
+  /* Subscribe widget */
+  .subscribe-widget {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--orange) 100%);
+    color: white;
+    text-align: center;
+  }
+  .subscribe-widget .widget-title { color: white; border-color: rgba(255,255,255,0.3); }
+  .subscribe-widget p {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .subscribe-form { display: flex; flex-direction: column; gap: 10px; }
+  .subscribe-form input {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    width: 100%;
+  }
+  .subscribe-form button {
+    background: var(--dark);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 11px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .subscribe-form button:hover { background: #111; }
+
+  /* ===== AD BANNER ===== */
+  .ad-banner {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+    padding: 0 24px;
+  }
+  .ad-inner {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+    border-radius: var(--radius);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    overflow: hidden;
+    position: relative;
+  }
+  .ad-inner::before {
+    content: '';
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    top: -60px; right: 120px;
+  }
+  .ad-text h3 { font-family: 'Fredoka One', cursive; font-size: 24px; margin-bottom: 6px; }
+  .ad-text p { font-size: 14px; opacity: 0.85; font-weight: 600; }
+  .ad-emoji { font-size: 56px; }
+  .btn-ad {
+    background: var(--secondary);
+    color: var(--dark);
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-ad:hover { transform: scale(1.05); }
+
+  /* ===== INSTAGRAM GRID ===== */
+  .instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .insta-item {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .insta-item::after {
+    content: '📷';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .insta-item:hover::after { opacity: 1; }
+  .insta-item:nth-child(1) { background: linear-gradient(135deg, #FF6B6B44, #FFD93D66); }
+  .insta-item:nth-child(2) { background: linear-gradient(135deg, #4D96FF33, #C77DFF44); }
+  .insta-item:nth-child(3) { background: linear-gradient(135deg, #6BCB7744, #FFD93D55); }
+  .insta-item:nth-child(4) { background: linear-gradient(135deg, #FF9A3C44, #FF6B6B33); }
+  .insta-item:nth-child(5) { background: linear-gradient(135deg, #C77DFF44, #4D96FF33); }
+  .insta-item:nth-child(6) { background: linear-gradient(135deg, #FFD93D44, #6BCB7755); }
+  .insta-item:nth-child(7) { background: linear-gradient(135deg, #FF6B6B33, #C77DFF44); }
+  .insta-item:nth-child(8) { background: linear-gradient(135deg, #4D96FF44, #6BCB7733); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark);
+    color: white;
+    padding: 48px 24px 0;
+    margin-top: 20px;
+  }
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-brand .logo { margin-bottom: 14px; display: inline-flex; }
+  .footer-brand p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 20px;
+  }
+  .footer-social { display: flex; gap: 10px; }
+  .fsocial {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .fsocial:hover { background: var(--primary); transform: translateY(-3px); }
+
+  .footer-col h4 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: var(--secondary);
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .footer-col ul a:hover { color: white; }
+  .footer-col ul a::before { content: '›'; font-size: 16px; color: var(--primary); }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+  }
+  .footer-bottom a { color: var(--secondary); text-decoration: none; }
+
+  /* ===== FLOATING ELEMENTS ===== */
+  .floating-shapes {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.04;
+  }
+  .shape-1 { width: 400px; height: 400px; background: var(--primary); top: 10%; left: -100px; animation: drift 20s ease-in-out infinite; }
+  .shape-2 { width: 300px; height: 300px; background: var(--blue); top: 50%; right: -80px; animation: drift 25s ease-in-out infinite reverse; }
+  .shape-3 { width: 200px; height: 200px; background: var(--accent); bottom: 20%; left: 40%; animation: drift 18s ease-in-out infinite 5s; }
+  @keyframes drift {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-40px) scale(1.1); }
+    66% { transform: translate(-20px,20px) scale(0.95); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    .hot-grid { grid-template-columns: 1fr; }
+    .main-layout { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    nav { display: none; }
+    .slide h2 { font-size: 28px; }
+    .slide-emoji { font-size: 80px; }
+  }
+  @media (max-width: 600px) {
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    .posts-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .ad-inner { flex-direction: column; gap: 16px; text-align: center; }
+    .slider-wrapper { height: 280px; }
+    .slide { padding: 24px 28px; }
+    .slide h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="floating-shapes">
+  <div class="shape shape-1"></div>
+  <div class="shape shape-2"></div>
+  <div class="shape shape-3"></div>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span>🎉 Selamat Datang di KidZone!</span>
+  <span>🎨 Artikel Edukatif & Seru untuk Anak</span>
+  <span>📚 Update Setiap Hari</span>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">🌟</div>
+      Kid<span>Zone</span>
+    </a>
+    <nav>
+      <div class="nav-item"><a href="#" style="text-decoration:none;color:inherit">Home</a></div>
+      <div class="nav-item has-dropdown">Kategori
+        <div class="dropdown">
+          <a href="#">🧸 Mainan</a>
+          <a href="#">📚 Buku & Edukasi</a>
+          <a href="#">🎮 Games</a>
+          <a href="#">🎨 Kreativitas</a>
+          <a href="#">⚽ Olahraga</a>
+        </div>
+      </div>
+      <div class="nav-item has-dropdown">Usia
+        <div class="dropdown">
+          <a href="#">👶 0–2 Tahun</a>
+          <a href="#">🧒 3–5 Tahun</a>
+          <a href="#">👦 6–9 Tahun</a>
+          <a href="#">🧑 10–12 Tahun</a>
+        </div>
+      </div>
+      <div class="nav-item"><a href="#" style="text-decoration:none;color:inherit">Tips Parenting</a></div>
+      <div class="nav-item has-dropdown">Halaman
+        <div class="dropdown">
+          <a href="#">ℹ️ Tentang Kami</a>
+          <a href="#">📩 Hubungi Kami</a>
+          <a href="#">🗺️ Sitemap</a>
+        </div>
+      </div>
+    </nav>
+    <div class="search-box">
+      <input type="text" placeholder="Cari artikel...">
+      <button>🔍</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO SLIDER -->
+<div class="slider-section">
+  <div class="slider-wrapper">
+    <div class="slide slide-1 active hot-badge">
+      <div class="slide-content">
+        <div class="slide-tag">✨ Artikel Pilihan</div>
+        <h2>Mainan Edukatif Terbaik untuk Balita</h2>
+        <p>Temukan rekomendasi mainan seru yang mendukung tumbuh kembang si kecil!</p>
+        <a href="#" class="btn-slide">Baca Selengkapnya →</a>
+      </div>
+      <div class="slide-emoji">🧸</div>
+    </div>
+    <div class="slide slide-2">
+      <div class="slide-content">
+        <div class="slide-tag">🎮 Gaming & Fun</div>
+        <h2>10 Game Edukatif Seru untuk Anak SD</h2>
+        <p>Game yang tidak hanya menghibur tapi juga mencerdaskan otak si kecil!</p>
+        <a href="#" class="btn-slide">Lihat Daftar →</a>
+      </div>
+      <div class="slide-emoji">🎮</div>
+    </div>
+    <div class="slide slide-3">
+      <div class="slide-content">
+        <div class="slide-tag">📚 Edukasi</div>
+        <h2>Persiapkan Anak Masuk Sekolah Dasar</h2>
+        <p>Panduan lengkap untuk orang tua dalam mempersiapkan si kecil!</p>
+        <a href="#" class="btn-slide">Pelajari Lebih →</a>
+      </div>
+      <div class="slide-emoji">📚</div>
+    </div>
+    <button class="slider-btn prev" onclick="changeSlide(-1)">‹</button>
+    <button class="slider-btn next" onclick="changeSlide(1)">›</button>
+    <div class="slider-dots">
+      <div class="dot active" onclick="goSlide(0)"></div>
+      <div class="dot" onclick="goSlide(1)"></div>
+      <div class="dot" onclick="goSlide(2)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">🏷️ Jelajahi Kategori</div>
+    <a href="#" class="view-all">Lihat Semua</a>
+  </div>
+  <div class="categories-grid">
+    <a href="#" class="cat-card"><span class="cat-icon">🧸</span><div class="cat-name">Mainan</div><div class="cat-count">42 artikel</div></a>
+    <a href="#" class="cat-card"><span class="cat-icon">📚</span><div class="cat-name">Buku</div><div class="cat-count">38 artikel</div></a>
+    <a href="#" class="cat-card"><span class="cat-icon">🎮</span><div class="cat-name">Games</div><div class="cat-count">27 artikel</div></a>
+    <a href="#" class="cat-card"><span class="cat-icon">🎨</span><div class="cat-name">Kreasi</div><div class="cat-count">35 artikel</div></a>
+    <a href="#" class="cat-card"><span class="cat-icon">⚽</span><div class="cat-name">Olahraga</div><div class="cat-count">19 artikel</div></a>
+    <a href="#" class="cat-card"><span class="cat-icon">🍎</span><div class="cat-name">Nutrisi</div><div class="cat-count">24 artikel</div></a>
+  </div>
+</div>
+
+<!-- AD BANNER -->
+<div class="ad-banner">
+  <div class="ad-inner">
+    <div class="ad-text">
+      <h3>🎉 Promo Spesial Koleksi Mainan Anak!</h3>
+      <p>Dapatkan mainan edukatif berkualitas dengan harga terbaik untuk si kecil</p>
+    </div>
+    <div class="ad-emoji">🎁</div>
+    <a href="#" class="btn-ad">Belanja Sekarang</a>
+  </div>
+</div>
+
+<!-- HOT POSTS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">🔥 Artikel Populer</div>
+    <a href="#" class="view-all">Lihat Semua</a>
+  </div>
+  <div class="hot-grid">
+    <a href="#" class="post-card big">
+      <div class="post-img-placeholder post-img">🧸</div>
+      <div class="post-body">
+        <span class="post-label label-red">Mainan</span>
+        <div class="post-title">Koleksi Boneka Nerf Plush Terbaru yang Wajib Dimiliki si Kecil!</div>
+        <div class="post-excerpt">Temukan koleksi boneka Nerf plush terbaru yang lucu dan aman untuk anak-anak segala usia. Kualitas premium dengan harga terjangkau!</div>
+        <div class="post-meta">
+          <span>📅 25 Feb 2024</span>
+          <span>👁 1.2k views</span>
+          <span>💬 18 komentar</span>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="post-card">
+      <div class="post-img-placeholder post-img">🎮</div>
+      <div class="post-body">
+        <span class="post-label label-blue">Games</span>
+        <div class="post-title">Pesta Bermain: Hemat Besar untuk Mainan Semua Usia!</div>
+        <div class="post-excerpt">Berbagai pilihan mainan seru dengan diskon spesial untuk anak dari bayi hingga remaja.</div>
+        <div class="post-meta">
+          <span>📅 17 Mar 2023</span>
+          <span>👁 856 views</span>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="post-card">
+      <div class="post-img-placeholder post-img">🎯</div>
+      <div class="post-body">
+        <span class="post-label label-green">Edukasi</span>
+        <div class="post-title">Aktifkan Semangat Belajar Anak dengan Mainan Seru Ini!</div>
+        <div class="post-excerpt">Mainan edukatif yang mengasah kemampuan berpikir dan kreativitas si kecil secara menyenangkan.</div>
+        <div class="post-meta">
+          <span>📅 17 Mar 2023</span>
+          <span>👁 743 views</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT + SIDEBAR -->
+<div class="main-layout">
+  <div>
+    <div class="section-header" style="margin-bottom:20px">
+      <div class="section-title">📰 Artikel Terbaru</div>
+    </div>
+    <div class="posts-grid">
+      <a href="#" class="post-card">
+        <div class="post-img-placeholder post-img">🚀</div>
+        <div class="post-body">
+          <span class="post-label label-orange">Kreasi</span>
+          <div class="post-title">Siap Masuk TK? Tips Persiapan untuk Orang Tua</div>
+          <div class="post-excerpt">Panduan praktis mempersiapkan anak memasuki taman kanak-kanak dengan percaya diri.</div>
+          <div class="post-meta"><span>📅 17 Mar 2023</span><span>👁 534</span></div>
+        </div>
+      </a>
+      <a href="#" class="post-card">
+        <div class="post-img-placeholder post-img">🎨</div>
+        <div class="post-body">
+          <span class="post-label label-purple">Kreasi</span>
+          <div class="post-title">Ibu, Anak, dan Seni: Aktivitas Seru Bersama</div>
+          <div class="post-excerpt">Kegiatan seni kreatif yang bisa dilakukan bersama anak di rumah dengan bahan sederhana.</div>
+          <div class="post-meta"><span>📅 17 Mar 2023</span><span>👁 412</span></div>
+        </div>
+      </a>
+      <a href="#" class="post-card">
+        <div class="post-img-placeholder post-img">🏫</div>
+        <div class="post-body">
+          <span class="post-label label-blue">Sekolah</span>
+          <div class="post-title">Hari Pertama TK: 8 Keterampilan Penting Anak</div>
+          <div class="post-excerpt">Kemampuan dasar yang perlu dimiliki anak sebelum memulai pendidikan formal pertama mereka.</div>
+          <div class="post-meta"><span>📅 17 Mar 2023</span><span>👁 621</span></div>
+        </div>
+      </a>
+      <a href="#" class="post-card">
+        <div class="post-img-placeholder post-img">🥗</div>
+        <div class="post-body">
+          <span class="post-label label-green">Nutrisi</span>
+          <div class="post-title">Kebiasaan Hidup Sehat untuk Pikiran Bahagia Anak</div>
+          <div class="post-excerpt">Tips membangun kebiasaan makan dan aktivitas sehat sejak dini untuk tumbuh kembang optimal.</div>
+          <div class="post-meta"><span>📅 17 Mar 2023</span><span>👁 389</span></div>
+        </div>
+      </a>
+    </div>
+    <div class="load-more-wrap">
+      <button class="btn-load">Muat Lebih Banyak ↓</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- Search -->
+    <div class="widget">
+      <div class="widget-title">🔍 Pencarian</div>
+      <div class="widget-search">
+        <input type="text" placeholder="Cari artikel...">
+        <button>→</button>
+      </div>
+    </div>
+
+    <!-- Subscribe -->
+    <div class="widget subscribe-widget">
+      <div class="widget-title">📬 Berlangganan</div>
+      <p>Dapatkan artikel terbaru langsung di email kamu setiap hari!</p>
+      <div class="subscribe-form">
+        <input type="email" placeholder="Email kamu...">
+        <button>Daftar Sekarang 🎉</button>
+      </div>
+    </div>
+
+    <!-- Popular Posts -->
+    <div class="widget">
+      <div class="widget-title">⭐ Artikel Populer</div>
+      <div class="popular-list">
+        <a href="#" class="popular-item">
+          <div class="popular-thumb">🧸</div>
+          <div class="popular-info">
+            <div class="popular-title">Koleksi Boneka Nerf Plush Terbaru!</div>
+            <div class="popular-date">📅 25 Feb 2024 · 1.2k views</div>
+          </div>
+        </a>
+        <a href="#" class="popular-item">
+          <div class="popular-thumb">🎮</div>
+          <div class="popular-info">
+            <div class="popular-title">Pesta Bermain: Hemat Besar untuk Semua Usia</div>
+            <div class="popular-date">📅 17 Mar 2023 · 856 views</div>
+          </div>
+        </a>
+        <a href="#" class="popular-item">
+          <div class="popular-thumb">🎯</div>
+          <div class="popular-info">
+            <div class="popular-title">Aktifkan Semangat Belajar dengan Mainan Seru</div>
+            <div class="popular-date">📅 17 Mar 2023 · 743 views</div>
+          </div>
+        </a>
+        <a href="#" class="popular-item">
+          <div class="popular-thumb">🏫</div>
+          <div class="popular-info">
+            <div class="popular-title">Hari Pertama TK: 8 Keterampilan Penting</div>
+            <div class="popular-date">📅 17 Mar 2023 · 621 views</div>
+          </div>
+        </a>
+        <a href="#" class="popular-item">
+          <div class="popular-thumb">🥗</div>
+          <div class="popular-info">
+            <div class="popular-title">Kebiasaan Sehat untuk Pikiran Bahagia Anak</div>
+            <div class="popular-date">📅 17 Mar 2023 · 534 views</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="widget">
+      <div class="widget-title">🏷️ Topik Populer</div>
+      <div class="tags-cloud">
+        <a href="#" class="tag tag-red">Mainan</a>
+        <a href="#" class="tag tag-blue">Edukasi</a>
+        <a href="#" class="tag tag-green">Games</a>
+        <a href="#" class="tag tag-purple">Kreasi</a>
+        <a href="#" class="tag tag-orange">Olahraga</a>
+        <a href="#" class="tag tag-red">Nutrisi</a>
+        <a href="#" class="tag tag-blue">Sekolah</a>
+        <a href="#" class="tag tag-green">Balita</a>
+        <a href="#" class="tag tag-purple">Parenting</a>
+        <a href="#" class="tag tag-orange">TK</a>
+        <a href="#" class="tag tag-red">SD</a>
+        <a href="#" class="tag tag-blue">Buku</a>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="widget">
+      <div class="widget-title">👥 Ikuti Kami</div>
+      <div class="social-grid">
+        <a href="#" class="social-btn fb">
+          <span class="social-icon">📘</span>
+          <div class="social-info">Facebook<small>12K Suka</small></div>
+        </a>
+        <a href="#" class="social-btn ig">
+          <span class="social-icon">📸</span>
+          <div class="social-info">Instagram<small>8.4K Followers</small></div>
+        </a>
+        <a href="#" class="social-btn yt">
+          <span class="social-icon">▶️</span>
+          <div class="social-info">YouTube<small>5.2K Subs</small></div>
+        </a>
+        <a href="#" class="social-btn tw">
+          <span class="social-icon">🐦</span>
+          <div class="social-info">Twitter<small>3.1K Followers</small></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Instagram Grid -->
+    <div class="widget">
+      <div class="widget-title">📸 Instagram</div>
+      <div class="instagram-grid">
+        <div class="insta-item">🧸</div>
+        <div class="insta-item">📚</div>
+        <div class="insta-item">🎨</div>
+        <div class="insta-item">🎮</div>
+        <div class="insta-item">⚽</div>
+        <div class="insta-item">🍎</div>
+        <div class="insta-item">🏫</div>
+        <div class="insta-item">🎯</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="#">
+        <div class="logo-icon">🌟</div>
+        Kid<span>Zone</span>
+      </a>
+      <p>Portal informasi terpercaya seputar dunia anak — mainan, edukasi, parenting, dan aktivitas seru untuk tumbuh kembang si kecil yang optimal.</p>
+      <div class="footer-social">
+        <a class="fsocial" href="#">📘</a>
+        <a class="fsocial" href="#">📸</a>
+        <a class="fsocial" href="#">▶️</a>
+        <a class="fsocial" href="#">🐦</a>
+        <a class="fsocial" href="#">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Kategori</h4>
+      <ul>
+        <li><a href="#">Mainan & Hobi</a></li>
+        <li><a href="#">Buku Anak</a></li>
+        <li><a href="#">Games Edukatif</a></li>
+        <li><a href="#">Kreasi & Seni</a></li>
+        <li><a href="#">Olahraga Anak</a></li>
+        <li><a href="#">Nutrisi & Kesehatan</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Usia</h4>
+      <ul>
+        <li><a href="#">Bayi (0–2 tahun)</a></li>
+        <li><a href="#">Balita (3–5 tahun)</a></li>
+        <li><a href="#">Anak SD (6–9 th)</a></li>
+        <li><a href="#">Pra-remaja (10–12)</a></li>
+        <li><a href="#">Tips Parenting</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informasi</h4>
+      <ul>
+        <li><a href="#">Tentang KidZone</a></li>
+        <li><a href="#">Hubungi Kami</a></li>
+        <li><a href="#">Kebijakan Privasi</a></li>
+        <li><a href="#">Syarat & Ketentuan</a></li>
+        <li><a href="#">Sitemap</a></li>
+        <li><a href="#">Pasang Iklan</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 <a href="#">KidZone</a> — Semua Hak Dilindungi</span>
+    <span>Dibuat dengan ❤️ untuk para orang tua & anak Indonesia</span>
+  </div>
+</footer>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    currentSlide = (n + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+  }
+
+  function changeSlide(dir) { showSlide(currentSlide + dir); }
+  function goSlide(n) { showSlide(n); }
+
+  // Auto-slide every 5s
+  setInterval(() => changeSlide(1), 5000);
+</script>
+</body>
+</html>
