@@ -835,13 +835,42 @@
     .slide-emoji { font-size: 80px; }
   }
   @media (max-width: 600px) {
-    .categories-grid { grid-template-columns: repeat(3, 1fr); }
-    .posts-grid { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr; }
-    .ad-inner { flex-direction: column; gap: 16px; text-align: center; }
-    .slider-wrapper { height: 280px; }
-    .slide { padding: 24px 28px; }
-    .slide h2 { font-size: 22px; }
+    /* Header */
+    .header-inner { padding: 10px 16px; }
+    .logo-img { max-height: 52px; transform: scale(1.2); }
+
+    /* Topbar */
+    .topbar { font-size: 11px; padding: 6px 12px; }
+
+    /* Slider */
+    .slider-section { padding: 0 12px; margin-top: 16px; }
+    .slider-wrapper { height: auto; min-height: 220px; border-radius: 20px; }
+    .slide { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .slide h2 { font-size: 20px; line-height: 1.25; }
+    .slide p { font-size: 13px; margin-bottom: 14px; }
+    .slide-tag { font-size: 10px; padding: 3px 10px; margin-bottom: 10px; }
+    .slide-emoji { font-size: 64px; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); opacity: 0.25; }
+    .btn-slide { font-size: 14px; padding: 10px 22px; }
+    .slider-btn { width: 34px; height: 34px; font-size: 16px; }
+
+    /* Section padding */
+    .section { padding: 0 16px; margin: 28px auto; }
+    .section-title { font-size: 20px; }
+
+    /* Artikel grid — 1 kolom di HP */
+    #artikel > div[style*="grid"] {
+      grid-template-columns: 1fr !important;
+      gap: 14px !important;
+    }
+    .post-card { border-radius: 16px; }
+    .post-img-placeholder { font-size: 36px; aspect-ratio: 16/7; }
+    .post-title { font-size: 15px; }
+    .post-excerpt { font-size: 12px; }
+
+    /* Footer */
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; font-size: 12px; }
+    footer { padding: 36px 16px 0; }
   }
 /* ===== PROFIL SECTION ===== */
   .profil-section {
@@ -1047,15 +1076,73 @@
   }
 
   @media (max-width: 900px) {
-    .tentang-card { grid-template-columns: 1fr; }
+    .tentang-card { grid-template-columns: 1fr; gap: 24px; }
     .visi-misi-grid { grid-template-columns: 1fr; }
     .nilai-grid { grid-template-columns: repeat(3, 1fr); }
     .program-grid { grid-template-columns: repeat(2, 1fr); }
+    .kelas-grid { grid-template-columns: 1fr; }
+    .reward-grid { grid-template-columns: 1fr; }
+    .lokasi-grid { grid-template-columns: 1fr; }
+    .map-wrapper { height: 280px; }
   }
   @media (max-width: 600px) {
-    .tentang-card { padding: 28px; }
-    .nilai-grid { grid-template-columns: repeat(2, 1fr); }
-    .program-grid { grid-template-columns: repeat(2, 1fr); }
+    /* Profil section */
+    .profil-section { padding: 0 16px; margin: 28px auto; }
+    .tentang-card { padding: 22px 18px; gap: 18px; border-radius: 20px; margin-bottom: 20px; }
+    .tentang-text h2 { font-size: 22px; margin-bottom: 12px; }
+    .tentang-text p { font-size: 13px; line-height: 1.7; }
+    .tentang-illustration { height: 160px; font-size: 72px; border-radius: 16px; }
+
+    /* Visi Misi */
+    .visi-misi-grid { gap: 14px; margin-bottom: 20px; }
+    .visi-card, .misi-card { padding: 22px 18px; border-radius: 18px; }
+    .visi-card h3, .misi-card h3 { font-size: 20px; margin-bottom: 12px; }
+    .visi-card p { font-size: 13px; }
+    .misi-list li { font-size: 13px; }
+
+    /* Nilai Utama */
+    .nilai-section { margin-bottom: 20px; }
+    .nilai-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .nilai-card { padding: 18px 12px; border-radius: 16px; }
+    .nilai-emoji { font-size: 30px; margin-bottom: 6px; }
+    .nilai-name { font-size: 15px; }
+    .nilai-desc { font-size: 11px; }
+
+    /* Program Kegiatan */
+    .program-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .program-card { padding: 16px 14px; border-radius: 16px; gap: 8px; }
+    .program-icon { width: 42px; height: 42px; font-size: 22px; border-radius: 10px; }
+    .program-name { font-size: 13px; }
+
+    /* Kelas Section */
+    .kelas-section { padding: 0 16px; }
+    .kelas-grid { grid-template-columns: 1fr; gap: 16px; }
+    .kelas-header { padding: 22px 20px 16px; }
+    .kelas-emoji { font-size: 38px; margin-bottom: 8px; }
+    .kelas-title { font-size: 18px; }
+    .kelas-body { padding: 16px; }
+    .kelas-features li { font-size: 13px; }
+    .kelas-price { font-size: 22px; }
+    .btn-daftar { font-size: 15px; padding: 11px; }
+
+    /* Reward */
+    .reward-section { padding: 0 16px; }
+    .reward-grid { grid-template-columns: 1fr; gap: 12px; }
+    .reward-card { padding: 22px 18px; border-radius: 18px; }
+    .reward-emoji { font-size: 38px; margin-bottom: 8px; }
+    .reward-title { font-size: 16px; }
+    .reward-desc { font-size: 13px; }
+
+    /* Lokasi & Kontak */
+    .lokasi-section { padding: 0 16px; }
+    .lokasi-grid { grid-template-columns: 1fr; gap: 16px; }
+    .map-wrapper { height: 240px; border-radius: 18px; }
+    .kontak-card { padding: 20px 16px; border-radius: 18px; gap: 14px; }
+    .kontak-title { font-size: 18px; }
+    .kontak-item { padding: 12px; border-radius: 12px; gap: 10px; }
+    .kontak-icon { width: 40px; height: 40px; font-size: 20px; }
+    .kontak-info-val { font-size: 13px; }
+    .btn-wa { font-size: 15px; padding: 12px 20px; }
   }
 
   /* Program Pembelajaran (Kelas) */
@@ -1328,6 +1415,106 @@
     .map-wrapper { height: 280px; }
   }
 
+  /* ===== ARTIKEL GRID ===== */
+  .artikel-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .artikel-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  }
+  @media (max-width: 600px) {
+    .artikel-grid { grid-template-columns: 1fr; gap: 14px; }
+    #artikel { padding: 0 16px; }
+  }
+
+  /* ===== MOBILE HAMBURGER ===== */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+  .hamburger:hover { background: var(--bg); }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--dark);
+    border-radius: 3px;
+    transition: all 0.3s;
+  }
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    backdrop-filter: blur(4px);
+  }
+  .mobile-nav.open { display: block; }
+  .mobile-nav-inner {
+    background: white;
+    width: 80%;
+    max-width: 300px;
+    height: 100%;
+    padding: 24px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 4px 0 32px rgba(0,0,0,0.15);
+  }
+  .mobile-nav-close {
+    align-self: flex-end;
+    background: var(--bg);
+    border: none;
+    font-size: 20px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mobile-nav-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 13px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 12px 4px;
+  }
+  .mobile-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 14px;
+    transition: all 0.2s;
+  }
+  .mobile-nav a:hover { background: var(--bg); color: var(--primary); }
+  .mobile-nav-wa {
+    margin-top: 12px;
+    background: #25D366 !important;
+    color: white !important;
+    border-radius: 50px !important;
+    justify-content: center;
+    font-size: 15px !important;
+  }
+  @media (max-width: 900px) {
+    .hamburger { display: flex; }
+  }
+
   /* LOGO HEADER */
 .logo-img {
   max-height: 70px;
@@ -1385,8 +1572,33 @@
       <div class="nav-item"><a href="#kontak" style="text-decoration:none;color:inherit">📍 Lokasi & Kontak</a></div>
       <div class="nav-item"><a href="https://wa.me/6288715188778" target="_blank" style="text-decoration:none;color:inherit">💬 Daftar Sekarang</a></div>
     </nav>
+      <button class="hamburger" onclick="document.getElementById('mobileNav').classList.add('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
   </div>
 </header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-close" onclick="document.getElementById('mobileNav').classList.remove('open')">✕</button>
+    <div class="mobile-nav-title">Menu</div>
+    <a href="#" onclick="document.getElementById('mobileNav').classList.remove('open')">🏠 Home</a>
+    <a href="#artikel" onclick="document.getElementById('mobileNav').classList.remove('open')">📰 Kegiatan & Artikel</a>
+    <div class="mobile-nav-title">Profil</div>
+    <a href="#profil" onclick="document.getElementById('mobileNav').classList.remove('open')">🏫 Tentang Kami</a>
+    <a href="#profil" onclick="document.getElementById('mobileNav').classList.remove('open')">🔭 Visi & Misi</a>
+    <a href="#profil" onclick="document.getElementById('mobileNav').classList.remove('open')">✨ Nilai Utama</a>
+    <div class="mobile-nav-title">Program</div>
+    <a href="#program-kami" onclick="document.getElementById('mobileNav').classList.remove('open')">🧸 Kelas Bermain</a>
+    <a href="#program-kami" onclick="document.getElementById('mobileNav').classList.remove('open')">🔠 Kelas Calistung</a>
+    <a href="#program-kami" onclick="document.getElementById('mobileNav').classList.remove('open')">📚 Kelas Mapel SD</a>
+    <a href="#reward" onclick="document.getElementById('mobileNav').classList.remove('open')">🏆 Reward Kelulusan</a>
+    <div class="mobile-nav-title">Kontak</div>
+    <a href="#kontak" onclick="document.getElementById('mobileNav').classList.remove('open')">📍 Lokasi & Maps</a>
+    <a href="https://wa.me/6288715188778" target="_blank" class="mobile-nav-wa">💬 Chat WhatsApp</a>
+  </div>
+</div>
 
 <!-- HERO SLIDER -->
 <div class="slider-section">
@@ -1433,7 +1645,7 @@
   <div class="section-header">
     <div class="section-title">📰 Kegiatan & Artikel Terbaru</div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+  <div class="artikel-grid">
     <a href="#" class="post-card">
       <div class="post-img-placeholder post-img">🚀</div>
       <div class="post-body">
