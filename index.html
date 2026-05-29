@@ -13,7 +13,7 @@
     --blue: #4D96FF;
     --purple: #C77DFF;
     --orange: #FF9A3C;
-    --bg: #FFF9F0;
+    --bg: #F6F2EC;
     --white: #ffffff;
     --dark: #2D2D2D;
     --text: #444444;
@@ -21,8 +21,42 @@
     --shadow: 0 8px 30px rgba(0,0,0,0.1);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+  body{
+  font-family:'Nunito',sans-serif;
+  background:#F6F2EC;
+  color:var(--text);
+  overflow-x:hidden;
+  position:relative;
+}
 
+/* Background lembut premium */
+body::before,
+body::after{
+  content:'';
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+  filter:blur(8px);
+}
+
+/* Kiri */
+body::before{
+  width:520px;
+  height:520px;
+  background:rgba(244,218,205,.25);
+  top:90px;
+  left:-260px;
+}
+
+/* Kanan */
+body::after{
+  width:360px;
+  height:360px;
+  background:rgba(236,233,231,.75);
+  right:-120px;
+  top:420px;
+}
   .topbar { background: var(--primary); color: white; text-align: center; padding: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
   .topbar span { margin: 0 12px; }
 
