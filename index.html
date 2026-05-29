@@ -367,6 +367,116 @@
     .slide-emoji { font-size: 60px; }
   }
 </style>
+  /* ABOUT SECTION STYLING */
+.about-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  margin: 60px 0;
+}
+
+.about-section .container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.about-section h2 {
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 50px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.about-intro {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.about-intro h3 {
+  font-size: 1.8em;
+  color: #3498db;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.about-intro p {
+  font-size: 1.1em;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 15px;
+}
+
+.about-intro .highlight {
+  font-size: 1.2em;
+  color: #e74c3c;
+  margin: 30px 0;
+}
+
+.vision-mission {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.vision-box, .mission-box {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.vision-box:hover, .mission-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.vision-box h3, .mission-box h3 {
+  font-size: 1.5em;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.vision-box ul, .mission-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.vision-box li, .mission-box li {
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 12px;
+  padding-left: 0;
+  font-size: 0.95em;
+}
+
+.vision-box li:before, .mission-box li:before {
+  content: "✓ ";
+  color: #27ae60;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  .about-section h2 {
+    font-size: 1.8em;
+  }
+
+  .about-intro h3 {
+    font-size: 1.3em;
+  }
+
+  .vision-mission {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .vision-box, .mission-box {
+    padding: 20px;
+  }
+}
 </head>
 <body>
 
@@ -502,7 +612,41 @@
       <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
     </div>
   </div>
+<!-- SECTION: TENTANG KAMI -->
+<section class="about-section">
+  <div class="container">
+    <h2>🌟 Tentang Kami</h2>
+    
+    <div class="about-intro">
+      <h3>Rumah Bermain & Belajar Al Fatih</h3>
+      <p>Al Fatih adalah lembaga pendidikan nonformal yang hadir untuk mendampingi tumbuh kembang anak melalui pendekatan bermain sambil belajar yang menyenangkan dan berkarakter.</p>
+      
+      <p>Berlokasi di Tambun Utara, Bekasi, kami menyediakan kelas bermain, calistung, dan pendampingan mata pelajaran SD berbasis Kurikulum Merdeka dengan kelas kecil dan personal (5–6 anak).</p>
+      
+      <p class="highlight"><strong>Setiap anak adalah bintang — kami hadir untuk membantu mereka bersinar!</strong> ⭐</p>
+    </div>
 
+    <div class="vision-mission">
+      <div class="vision-box">
+        <h3>🔭 Visi</h3>
+        <ul>
+          <li>Menjadi lembaga pendidikan nonformal terpercaya yang melahirkan generasi cerdas, berkarakter, dan berakhlak mulia.</li>
+          <li>Mewujudkan lingkungan belajar yang menyenangkan, aman, dan berkualitas bagi setiap anak.</li>
+        </ul>
+      </div>
+
+      <div class="mission-box">
+        <h3>🚀 Misi</h3>
+        <ul>
+          <li>Menyelenggarakan pembelajaran calistung yang menyenangkan sesuai perkembangan anak.</li>
+          <li>Membangun karakter positif melalui kegiatan bermain edukatif.</li>
+          <li>Mendampingi siswa SD dalam memahami mata pelajaran berbasis Kurikulum Merdeka.</li>
+          <li>Menjalin komunikasi aktif antara guru dan orang tua melalui portal digital.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
   <!-- PROGRAM KAMI -->
   <div class="kelas-section" id="program-kami">
     <div class="section-header"><div class="section-title">📚 Program Kami</div></div>
