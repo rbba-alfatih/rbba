@@ -1151,7 +1151,18 @@ footer {
 /* toast */
 .toast.success { background: linear-gradient(135deg, #27C97B, #6BCBFF) !important; }
 .toast.error   { background: linear-gradient(135deg, #FF6FB4, #FF9A3C) !important; }
+.footer-logo{
+  height: 65px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
 
+/* biar posisi logo footer rapi */
+.footer-brand .logo{
+  display: inline-flex !important;
+  align-items: center !important;
+}
 </style>
 
 <body>
@@ -1465,7 +1476,11 @@ footer {
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="logo" href="#" onclick="showMain()"><div class="logo-icon">🌟</div>Al Fatih <span>Portal</span></a>
+        <a class="logo" href="#" onclick="showMain()">
+  <img src="https://raw.githubusercontent.com/rbba-alfatih/rbba/main/logo.png" 
+       alt="Logo Rumah Bermain & Belajar Al Fatih" 
+       class="footer-logo">
+</a>
         <p>Portal digital terpercaya untuk Guru, Orang Tua, dan Murid Rumah Bermain & Belajar Al Fatih — Tambun Utara, Bekasi.</p>
         <div class="footer-social">
           <a class="fsocial" href="#">📘</a><a class="fsocial" href="#">📸</a><a class="fsocial" href="#">▶️</a>
