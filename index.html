@@ -4490,163 +4490,271 @@ function terimaCalonSiswa(id) {
   showToast('🎉 ' + c.nama + ' berhasil diterima dan masuk Data Siswa!', 'success');
 }
 
-// ===== ABSEN GURU =====
+// ============================================================
+//  ABSEN GURU — JavaScript (FIXED)
+//  Ganti blok // ===== ABSEN GURU ===== di index.html
+//  dengan seluruh kode di bawah ini.
+// ============================================================
+
 // ⚠️ GANTI URL INI dengan Web App URL Google Apps Script kamu
 var AG_URL = 'https://script.google.com/macros/s/AKfycbzY8PvQRS7QVKwt3iJ1f-re4R2RPK6wpB2W8u4eD95A2sLUfL3PvfhYySufPkVZMkld/exec';
 
-var _agCekTimeout = null;
+var _agCekTimeout  = null;
 var _agJamInterval = null;
 
+// ── Inisialisasi halaman absen guru ────────────────────────
 function initAbsenGuru() {
   var now = new Date();
-  var pad = function(n){ return String(n).padStart(2,'0'); };
-  var tgl = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
-  var jam = pad(now.getHours())+':'+pad(now.getMinutes());
-  var tglEl = document.getElementById('ag-tanggal');
+  var pad = function(n) { return String(n).padStart(2, '0'); };
+  var tgl = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+  var jam = pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+  // Set tanggal
+  var tglEl   = document.getElementById('ag-tanggal');
   var tglDisp = document.getElementById('ag-tgl-display');
+  if (tglEl)   tglEl.value       = tgl;
+  if (tglDisp) tglDisp.textContent = tgl;
+
+  // Set jam masuk ke waktu sekarang
+  var jamEl   = document.getElementById('ag-jam-masuk');
   var jamDisp = document.getElementById('ag-jam-display');
-  var jamEl = document.getElementById('ag-jam-masuk');
-  if(tglEl) tglEl.value = tgl;
-  if(tglDisp) tglDisp.textContent = tgl;
-  if(jamEl) jamEl.value = jam;
-  if(jamDisp) jamDisp.textContent = jam;
-  if(_agJamInterval) clearInterval(_agJamInterval);
-  _agJamInterval = setInterval(function(){
-    var t = new Date();
+  if (jamEl)   jamEl.value        = jam;
+  if (jamDisp) jamDisp.textContent = jam;
+
+  // PERBAIKAN: Jam keluar dikosongkan, bukan '00:00'
+  var jamKEl = document.getElementById('ag-jam-keluar');
+  if (jamKEl) jamKEl.value = '';
+
+  // Live clock
+  if (_agJamInterval) clearInterval(_agJamInterval);
+  _agJamInterval = setInterval(function() {
+    var t  = new Date();
     var el = document.getElementById('ag-jam-display');
-    if(el) el.textContent = pad(t.getHours())+':'+pad(t.getMinutes())+':'+pad(t.getSeconds());
+    if (el) el.textContent = pad(t.getHours()) + ':' + pad(t.getMinutes()) + ':' + pad(t.getSeconds());
+
+    // Update jam masuk setiap menit jika belum submit
+    var btnMasuk = document.getElementById('ag-btn-masuk');
+    if (btnMasuk && !btnMasuk.disabled) {
+      var jmEl = document.getElementById('ag-jam-masuk');
+      if (jmEl) jmEl.value = pad(t.getHours()) + ':' + pad(t.getMinutes());
+    }
   }, 1000);
+
   // Auto-fill nama dari user login
   var namaEl = document.getElementById('ag-nama');
-  if(namaEl && currentUser && currentUser.role === 'guru') {
+  if (namaEl && typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'guru') {
     namaEl.value = currentUser.nama;
-    agCekStatus();
   }
+
+  // Cek status hari ini
+  agCekStatus();
 }
 
+// ── Cek status absen (masuk & keluar) dari server ──────────
 function agCekStatus() {
   clearTimeout(_agCekTimeout);
-  _agCekTimeout = setTimeout(function(){
-    var nama = (document.getElementById('ag-nama')||{}).value||'';
-    var tgl  = (document.getElementById('ag-tanggal')||{}).value||'';
-    if(!nama || !tgl || !AG_URL || AG_URL.indexOf('GANTI') > -1) return;
-    fetch(AG_URL+'?action=cekHariIni&namaGuru='+encodeURIComponent(nama)+'&tanggal='+tgl)
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        if(d.status==='success') agUpdateBadge(d.sudahMasuk, d.sudahKeluar, d.jamMasuk, d.jamKeluar);
-      }).catch(function(){});
+  _agCekTimeout = setTimeout(function() {
+    var nama = ((document.getElementById('ag-nama') || {}).value || '').trim();
+    var tgl  = ((document.getElementById('ag-tanggal') || {}).value || '').trim();
+    if (!nama || !tgl) return;
+    if (!AG_URL || AG_URL.indexOf('GANTI') > -1) return;
+
+    fetch(AG_URL + '?action=cekHariIni&namaGuru=' + encodeURIComponent(nama) + '&tanggal=' + encodeURIComponent(tgl))
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.status === 'success') {
+          agUpdateBadge(d.sudahMasuk, d.sudahKeluar, d.jamMasuk, d.jamKeluar);
+
+          // PERBAIKAN: jika sudah masuk, isi jam keluar dengan waktu sekarang
+          if (d.sudahMasuk && !d.sudahKeluar) {
+            var now = new Date();
+            var pad = function(n) { return String(n).padStart(2, '0'); };
+            var jamKEl = document.getElementById('ag-jam-keluar');
+            if (jamKEl) jamKEl.value = pad(now.getHours()) + ':' + pad(now.getMinutes());
+          }
+        }
+      })
+      .catch(function() { /* silent fail */ });
   }, 800);
 }
 
+// ── Update tampilan badge status ───────────────────────────
 function agUpdateBadge(sudahMasuk, sudahKeluar, jamMasuk, jamKeluar) {
-  var bM = document.getElementById('ag-badge-masuk');
-  var bK = document.getElementById('ag-badge-keluar');
+  var bM  = document.getElementById('ag-badge-masuk');
+  var bK  = document.getElementById('ag-badge-keluar');
   var bMb = document.getElementById('ag-btn-masuk');
   var bKb = document.getElementById('ag-btn-keluar');
-  if(bM) {
-    if(sudahMasuk) {
-      bM.style.cssText='display:flex;align-items:center;gap:8px;background:#f0fff4;border:1.5px solid #9ae6b4;border-radius:12px;padding:10px 18px;font-size:13px;color:#276749;flex:1;min-width:150px';
-      bM.innerHTML='<div style="width:10px;height:10px;border-radius:50%;background:#48bb78;flex-shrink:0"></div><div><strong>Sudah Absen Masuk</strong><br><small>'+jamMasuk+'</small></div>';
-      if(bMb) bMb.disabled=true;
+
+  // Badge Masuk
+  if (bM) {
+    if (sudahMasuk) {
+      bM.style.cssText = 'display:flex;align-items:center;gap:8px;background:#f0fff4;border:1.5px solid #9ae6b4;border-radius:12px;padding:10px 18px;font-size:13px;color:#276749;flex:1;min-width:150px';
+      bM.innerHTML     = '<div style="width:10px;height:10px;border-radius:50%;background:#48bb78;flex-shrink:0"></div><div><strong>Sudah Absen Masuk</strong><br><small>' + (jamMasuk || '') + '</small></div>';
+      if (bMb) bMb.disabled = true;
     } else {
-      bM.style.cssText='display:flex;align-items:center;gap:8px;background:#fff5f5;border:1.5px solid #feb2b2;border-radius:12px;padding:10px 18px;font-size:13px;color:#9b2c2c;flex:1;min-width:150px';
-      bM.innerHTML='<div style="width:10px;height:10px;border-radius:50%;background:#fc8181;flex-shrink:0"></div><strong>Belum Absen Masuk</strong>';
-      if(bMb) bMb.disabled=false;
+      bM.style.cssText = 'display:flex;align-items:center;gap:8px;background:#fff5f5;border:1.5px solid #feb2b2;border-radius:12px;padding:10px 18px;font-size:13px;color:#9b2c2c;flex:1;min-width:150px';
+      bM.innerHTML     = '<div style="width:10px;height:10px;border-radius:50%;background:#fc8181;flex-shrink:0"></div><strong>Belum Absen Masuk</strong>';
+      if (bMb) bMb.disabled = false;
     }
   }
-  if(bK) {
-    if(sudahKeluar) {
-      bK.style.cssText='display:flex;align-items:center;gap:8px;background:#f0fff4;border:1.5px solid #9ae6b4;border-radius:12px;padding:10px 18px;font-size:13px;color:#276749;flex:1;min-width:150px';
-      bK.innerHTML='<div style="width:10px;height:10px;border-radius:50%;background:#48bb78;flex-shrink:0"></div><div><strong>Sudah Absen Keluar</strong><br><small>'+jamKeluar+'</small></div>';
-      if(bKb) bKb.disabled=true;
+
+  // Badge Keluar
+  if (bK) {
+    if (sudahKeluar) {
+      bK.style.cssText = 'display:flex;align-items:center;gap:8px;background:#f0fff4;border:1.5px solid #9ae6b4;border-radius:12px;padding:10px 18px;font-size:13px;color:#276749;flex:1;min-width:150px';
+      bK.innerHTML     = '<div style="width:10px;height:10px;border-radius:50%;background:#48bb78;flex-shrink:0"></div><div><strong>Sudah Absen Keluar</strong><br><small>' + (jamKeluar || '') + '</small></div>';
+      if (bKb) bKb.disabled = true;
     } else {
-      bK.style.cssText='display:flex;align-items:center;gap:8px;background:#fff5f5;border:1.5px solid #feb2b2;border-radius:12px;padding:10px 18px;font-size:13px;color:#9b2c2c;flex:1;min-width:150px';
-      bK.innerHTML='<div style="width:10px;height:10px;border-radius:50%;background:#fc8181;flex-shrink:0"></div><strong>Belum Absen Keluar</strong>';
-      if(bKb) bKb.disabled=false;
+      // PERBAIKAN: tombol keluar hanya aktif jika sudah masuk
+      bK.style.cssText = 'display:flex;align-items:center;gap:8px;background:#fff5f5;border:1.5px solid #feb2b2;border-radius:12px;padding:10px 18px;font-size:13px;color:#9b2c2c;flex:1;min-width:150px';
+      bK.innerHTML     = '<div style="width:10px;height:10px;border-radius:50%;background:#fc8181;flex-shrink:0"></div><strong>Belum Absen Keluar</strong>';
+      if (bKb) bKb.disabled = !sudahMasuk; // aktif hanya jika sudah masuk
     }
   }
 }
 
+// ── Tampilkan alert ────────────────────────────────────────
 function agAlert(type, msg) {
   var el = document.getElementById('ag-alert');
-  if(!el) return;
+  if (!el) return;
   var styles = {
     success: 'background:#f0fff4;border:1.5px solid #9ae6b4;color:#276749',
     error:   'background:#fff5f5;border:1.5px solid #feb2b2;color:#9b2c2c',
     loading: 'background:#ebf4ff;border:1.5px solid #90cdf4;color:#2a69ac'
   };
-  el.style.cssText = 'display:block;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:14px;' + (styles[type]||'');
-  el.textContent = msg;
-  if(type !== 'loading') setTimeout(function(){ el.style.display='none'; }, 4000);
+  el.style.cssText = 'display:block;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:14px;' + (styles[type] || '');
+  el.textContent   = msg;
+  if (type !== 'loading') setTimeout(function() { el.style.display = 'none'; }, 4000);
 }
 
+// ── Submit absen masuk / keluar ────────────────────────────
 function agSubmit(tipe) {
-  var nama     = (document.getElementById('ag-nama')||{}).value||'';
-  var tgl      = (document.getElementById('ag-tanggal')||{}).value||'';
-  var status   = (document.getElementById('ag-status')||{}).value||'Hadir';
-  var jamMasuk = (document.getElementById('ag-jam-masuk')||{}).value||'';
-  var jamKeluar= (document.getElementById('ag-jam-keluar')||{}).value||'';
-  var ket      = (document.getElementById('ag-keterangan')||{}).value||'';
+  var nama      = ((document.getElementById('ag-nama')       || {}).value || '').trim();
+  var tgl       = ((document.getElementById('ag-tanggal')    || {}).value || '').trim();
+  var status    = ((document.getElementById('ag-status')     || {}).value || 'Hadir').trim();
+  var jamMasuk  = ((document.getElementById('ag-jam-masuk')  || {}).value || '').trim();
+  var jamKeluar = ((document.getElementById('ag-jam-keluar') || {}).value || '').trim();
+  var ket       = ((document.getElementById('ag-keterangan') || {}).value || '').trim();
 
-  if(!nama) { agAlert('error','⚠️ Nama guru wajib diisi!'); return; }
-  if(AG_URL.indexOf('GANTI') > -1) { agAlert('error','⚠️ URL Apps Script belum diisi! Edit variabel AG_URL di index.html'); return; }
-
-  agAlert('loading', tipe==='masuk' ? '⏳ Menyimpan absen masuk...' : '⏳ Menyimpan absen keluar...');
-
-  var payload = JSON.stringify({
-    action: tipe==='masuk' ? 'absenMasuk' : 'absenKeluar',
-    namaGuru: nama, tanggal: tgl,
-    jamMasuk: jamMasuk, jamKeluar: jamKeluar,
-    status: status, keterangan: ket
-  });
-
-  fetch(AG_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: payload })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if(d.status==='success') {
-        agAlert('success', '✅ '+d.message);
-        agCekStatus();
-        showToast('✅ '+d.message, 'success');
-      } else {
-        agAlert('error', '❌ '+(d.message||'Terjadi kesalahan'));
-      }
-    })
-    .catch(function(){ agAlert('error','❌ Gagal terhubung ke server. Periksa koneksi internet.'); });
-}
-
-function agLoadRekap() {
-  var filterTgl  = (document.getElementById('ag-filter-tgl')||{}).value||'';
-  var filterNama = ((document.getElementById('ag-filter-nama')||{}).value||'').toLowerCase();
-  var container  = document.getElementById('ag-rekap-container');
-  if(!container) return;
-  if(AG_URL.indexOf('GANTI') > -1) {
-    container.innerHTML='<p style="color:var(--primary);font-size:13px;font-weight:700;text-align:center;padding:20px">⚠️ URL Apps Script belum diisi! Edit variabel AG_URL di index.html</p>';
+  if (!nama) { agAlert('error', '⚠️ Nama guru wajib diisi!'); return; }
+  if (!AG_URL || AG_URL.indexOf('GANTI') > -1) {
+    agAlert('error', '⚠️ URL Apps Script belum diisi! Edit variabel AG_URL di index.html');
     return;
   }
-  container.innerHTML='<p style="color:#aaa;font-size:13px;font-weight:600;text-align:center;padding:20px">⏳ Memuat data...</p>';
-  fetch(AG_URL+'?action=getAll')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if(d.status!=='success'){ container.innerHTML='<p style="color:var(--primary);font-size:13px;text-align:center;padding:20px">❌ Gagal memuat data</p>'; return; }
-      var rows = d.data||[];
-      if(filterTgl)  rows=rows.filter(function(r){ return r['Tanggal']===filterTgl; });
-      if(filterNama) rows=rows.filter(function(r){ return (r['Nama Guru']||'').toLowerCase().indexOf(filterNama)>-1; });
-      if(!rows.length){ container.innerHTML='<p style="color:#aaa;font-size:13px;font-weight:600;text-align:center;padding:20px">🔍 Tidak ada data ditemukan</p>'; return; }
-      var badgeClass = function(s){ return s==='Hadir'?'badge-hadir':s==='Izin'?'badge-izin':s==='Sakit'?'badge-sakit':'badge-alfa'; };
-      container.innerHTML='<p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">Menampilkan <strong>'+rows.length+'</strong> data</p>'+
-        '<div style="overflow-x:auto"><table class="data-table">'+
-        '<thead><tr><th>No</th><th>Nama Guru</th><th>Tanggal</th><th>Jam Masuk</th><th>Jam Keluar</th><th>Status</th><th>Keterangan</th></tr></thead>'+
-        '<tbody>'+rows.map(function(r,i){
-          return '<tr><td>'+(i+1)+'</td>'+
-            '<td><strong>'+(r['Nama Guru']||'-')+'</strong></td>'+
-            '<td>'+(r['Tanggal']||'-')+'</td>'+
-            '<td>'+(r['Jam Masuk']||'-')+'</td>'+
-            '<td>'+(r['Jam Keluar']||'<span style="color:#aaa;font-style:italic">Belum keluar</span>')+'</td>'+
-            '<td><span class="'+badgeClass(r['Status'])+'">'+(r['Status']||'-')+'</span></td>'+
-            '<td>'+(r['Keterangan']||'-')+'</td></tr>';
-        }).join('')+'</tbody></table></div>';
+
+  // PERBAIKAN: validasi jam keluar saat absen keluar
+  if (tipe === 'keluar') {
+    if (!jamKeluar) {
+      // Isi otomatis dengan waktu sekarang
+      var now = new Date();
+      var pad = function(n) { return String(n).padStart(2, '0'); };
+      jamKeluar = pad(now.getHours()) + ':' + pad(now.getMinutes());
+      var jkEl = document.getElementById('ag-jam-keluar');
+      if (jkEl) jkEl.value = jamKeluar;
+    }
+  }
+
+  agAlert('loading', tipe === 'masuk' ? '⏳ Menyimpan absen masuk...' : '⏳ Menyimpan absen keluar...');
+
+  // Disable tombol agar tidak double-submit
+  var btnId = tipe === 'masuk' ? 'ag-btn-masuk' : 'ag-btn-keluar';
+  var btn   = document.getElementById(btnId);
+  if (btn) btn.disabled = true;
+
+  var payload = JSON.stringify({
+    action:      tipe === 'masuk' ? 'absenMasuk' : 'absenKeluar',
+    namaGuru:    nama,
+    tanggal:     tgl,
+    jamMasuk:    jamMasuk,
+    jamKeluar:   jamKeluar,
+    status:      status,
+    keterangan:  ket
+  });
+
+  fetch(AG_URL, {
+    method:  'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body:    payload
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.status === 'success') {
+        agAlert('success', '✅ ' + d.message);
+        agCekStatus(); // refresh badge
+        if (typeof showToast === 'function') showToast('✅ ' + d.message, 'success');
+      } else {
+        agAlert('error', '❌ ' + (d.message || 'Terjadi kesalahan'));
+        if (btn) btn.disabled = false; // kembalikan jika error
+      }
     })
-    .catch(function(){ container.innerHTML='<p style="color:var(--primary);font-size:13px;text-align:center;padding:20px">❌ Gagal terhubung ke server</p>'; });
+    .catch(function() {
+      agAlert('error', '❌ Gagal terhubung ke server. Periksa koneksi internet.');
+      if (btn) btn.disabled = false;
+    });
+}
+
+// ── Muat rekap absen ───────────────────────────────────────
+function agLoadRekap() {
+  var filterTgl  = ((document.getElementById('ag-filter-tgl')  || {}).value || '').trim();
+  var filterNama = ((document.getElementById('ag-filter-nama') || {}).value || '').toLowerCase().trim();
+  var container  = document.getElementById('ag-rekap-container');
+  if (!container) return;
+
+  if (!AG_URL || AG_URL.indexOf('GANTI') > -1) {
+    container.innerHTML = '<p style="color:var(--primary);font-size:13px;font-weight:700;text-align:center;padding:20px">⚠️ URL Apps Script belum diisi!</p>';
+    return;
+  }
+
+  container.innerHTML = '<p style="color:#aaa;font-size:13px;font-weight:600;text-align:center;padding:20px">⏳ Memuat data...</p>';
+
+  fetch(AG_URL + '?action=getAll')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.status !== 'success') {
+        container.innerHTML = '<p style="color:var(--primary);font-size:13px;text-align:center;padding:20px">❌ Gagal memuat data</p>';
+        return;
+      }
+
+      var rows = d.data || [];
+
+      // Filter
+      if (filterTgl)  rows = rows.filter(function(r) { return String(r['Tanggal'] || '') === filterTgl; });
+      if (filterNama) rows = rows.filter(function(r) { return (r['Nama Guru'] || '').toLowerCase().indexOf(filterNama) > -1; });
+
+      if (!rows.length) {
+        container.innerHTML = '<p style="color:#aaa;font-size:13px;font-weight:600;text-align:center;padding:20px">🔍 Tidak ada data ditemukan</p>';
+        return;
+      }
+
+      var badgeClass = function(s) {
+        return s === 'Hadir' ? 'badge-hadir' : s === 'Izin' ? 'badge-izin' : s === 'Sakit' ? 'badge-sakit' : 'badge-alfa';
+      };
+
+      var html = '<p style="font-size:13px;color:#888;font-weight:600;margin-bottom:12px">Menampilkan <strong>' + rows.length + '</strong> data</p>'
+        + '<div style="overflow-x:auto"><table class="data-table">'
+        + '<thead><tr><th>No</th><th>Nama Guru</th><th>Tanggal</th><th>Jam Masuk</th><th>Jam Keluar</th><th>Status</th><th>Keterangan</th></tr></thead>'
+        + '<tbody>'
+        + rows.map(function(r, i) {
+            var jk = String(r['Jam Keluar'] || '').trim();
+            // PERBAIKAN: sembunyikan '0:00' dan '0.00' sebagai belum keluar
+            var jamKeluarHtml = (jk && jk !== '0:00' && jk !== '0.00' && jk !== '0')
+              ? jk
+              : '<span style="color:#aaa;font-style:italic">Belum keluar</span>';
+            return '<tr><td>' + (i + 1) + '</td>'
+              + '<td><strong>' + (r['Nama Guru']  || '-') + '</strong></td>'
+              + '<td>'         + (r['Tanggal']    || '-') + '</td>'
+              + '<td>'         + (r['Jam Masuk']  || '-') + '</td>'
+              + '<td>'         + jamKeluarHtml             + '</td>'
+              + '<td><span class="' + badgeClass(r['Status']) + '">' + (r['Status'] || '-') + '</span></td>'
+              + '<td>'         + (r['Keterangan'] || '-') + '</td></tr>';
+          }).join('')
+        + '</tbody></table></div>';
+
+      container.innerHTML = html;
+    })
+    .catch(function() {
+      container.innerHTML = '<p style="color:var(--primary);font-size:13px;text-align:center;padding:20px">❌ Gagal terhubung ke server</p>';
+    });
 }
 
 // ── Jalankan sync dari Sheets setelah semua script & variabel siap ──
