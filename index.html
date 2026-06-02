@@ -1748,10 +1748,10 @@ footer {
         <input type="text" id="ag-keterangan" placeholder="Tambahkan keterangan...">
       </div>
     </div>
-    <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
-      <button class="btn-simpan" id="ag-btn-masuk" onclick="agSubmit('masuk')" style="background:linear-gradient(135deg,#48bb78,#38a169);flex:1">✅ Absen Masuk</button>
-      <button class="btn-simpan" id="ag-btn-keluar" onclick="agSubmit('keluar')" style="background:linear-gradient(135deg,#ed8936,#dd6b20);flex:1">🚪 Absen Keluar</button>
-    </div>
+<div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
+  <button class="btn-simpan" id="ag-btn-masuk" onclick="agSubmit('masuk')" style="background:linear-gradient(135deg,#48bb78,#38a169);flex:1">✅ Absen Masuk</button>
+  <button class="btn-simpan" id="ag-btn-keluar" onclick="agSubmit('keluar')" style="background:linear-gradient(135deg,#ed8936,#dd6b20);flex:1" disabled>🚪 Absen Keluar</button>
+</div>
   </div>
 
   <!-- REKAP -->
@@ -4598,17 +4598,16 @@ function agUpdateBadge(sudahMasuk, sudahKeluar, jamMasuk, jamKeluar) {
     }
   }
 
-  // Badge Keluar
+// Badge Keluar
   if (bK) {
     if (sudahKeluar) {
       bK.style.cssText = 'display:flex;align-items:center;gap:8px;background:#f0fff4;border:1.5px solid #9ae6b4;border-radius:12px;padding:10px 18px;font-size:13px;color:#276749;flex:1;min-width:150px';
       bK.innerHTML     = '<div style="width:10px;height:10px;border-radius:50%;background:#48bb78;flex-shrink:0"></div><div><strong>Sudah Absen Keluar</strong><br><small>' + (jamKeluar || '') + '</small></div>';
       if (bKb) bKb.disabled = true;
     } else {
-      // PERBAIKAN: tombol keluar hanya aktif jika sudah masuk
       bK.style.cssText = 'display:flex;align-items:center;gap:8px;background:#fff5f5;border:1.5px solid #feb2b2;border-radius:12px;padding:10px 18px;font-size:13px;color:#9b2c2c;flex:1;min-width:150px';
       bK.innerHTML     = '<div style="width:10px;height:10px;border-radius:50%;background:#fc8181;flex-shrink:0"></div><strong>Belum Absen Keluar</strong>';
-      if (bKb) bKb.disabled = !sudahMasuk; // aktif hanya jika sudah masuk
+      if (bKb) bKb.disabled = !sudahMasuk;
     }
   }
 }
