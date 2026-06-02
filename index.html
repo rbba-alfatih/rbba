@@ -4580,10 +4580,12 @@ function agCekStatus() {
 
 // ── Update tampilan badge status ───────────────────────────
 function agUpdateBadge(sudahMasuk, sudahKeluar, jamMasuk, jamKeluar) {
+  console.log('agUpdateBadge dipanggil:', sudahMasuk, sudahKeluar, jamMasuk, jamKeluar);
   var bM  = document.getElementById('ag-badge-masuk');
   var bK  = document.getElementById('ag-badge-keluar');
   var bMb = document.getElementById('ag-btn-masuk');
   var bKb = document.getElementById('ag-btn-keluar');
+  console.log('Elemen bKb:', bKb);
 
   // Badge Masuk
   if (bM) {
