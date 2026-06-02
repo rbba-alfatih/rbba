@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Al Fatih">
+<meta name="theme-color" content="#FF6B6B">
+<title>Al Fatih – Portal Belajar</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF6B6B;
+  --secondary: #FFD93D;
+  --accent: #6BCB77;
+  --blue: #4D96FF;
+  --purple: #C77DFF;
+  --orange: #FF9A3C;
+  --bg: #F6F2EC;
+  --card: #ffffff;
+  --dark: #2D2D2D;
+  --text: #444444;
+  --muted: #999;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --bottom-nav-h: 72px;
+  --status-bar: env(safe-area-inset-top, 0px);
+  --bottom-safe: env(safe-area-inset-bottom, 0px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height:100%; overflow:hidden; background:var(--bg); }
+body { font-family:'Nunito',sans-serif; color:var(--text); }
+
+/* ── SCREENS ── */
+.screen { position:fixed; inset:0; background:var(--bg); display:none; flex-direction:column; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ── SPLASH ── */
+#screen-splash {
+  background: linear-gradient(145deg, #FF6B6B 0%, #FF9A3C 50%, #FFD93D 100%);
+  align-items:center; justify-content:center; flex-direction:column; gap:16px;
+}
+.splash-logo { width:110px; height:110px; border-radius:32px; background:white; 
+  display:flex; align-items:center; justify-content:center; font-size:56px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2); animation: splashPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.splash-logo img { width:90px; height:90px; object-fit:contain; border-radius:20px; }
+.splash-title { font-family:'Fredoka One',cursive; font-size:26px; color:white; text-align:center; letter-spacing:.5px; }
+.splash-sub { font-size:13px; color:rgba(255,255,255,0.8); font-weight:700; text-align:center; }
+.splash-dots { display:flex; gap:6px; margin-top:8px; }
+.splash-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.4); animation: dotPulse 1.2s ease-in-out infinite; }
+.splash-dot:nth-child(2) { animation-delay:.2s; }
+.splash-dot:nth-child(3) { animation-delay:.4s; }
+
+@keyframes splashPop { from { transform:scale(0) rotate(-10deg); opacity:0; } to { transform:scale(1) rotate(0); opacity:1; } }
+@keyframes dotPulse { 0%,100%{background:rgba(255,255,255,0.4)} 50%{background:white} }
+
+/* ── LOGIN ── */
+#screen-login {
+  background: linear-gradient(160deg, #FFF5F5 0%, #F6F2EC 60%, #EEF6FF 100%);
+  overflow-y:auto;
+}
+.login-top { padding: calc(var(--status-bar) + 48px) 24px 24px; text-align:center; }
+.login-logo { width:80px; height:80px; border-radius:24px; overflow:hidden; margin:0 auto 16px; 
+  box-shadow: 0 8px 24px rgba(255,107,107,0.3); background:white; display:flex; align-items:center; justify-content:center; }
+.login-logo img { width:68px; height:68px; object-fit:contain; }
+.login-school { font-family:'Fredoka One',cursive; font-size:22px; color:var(--dark); line-height:1.2; }
+.login-tagline { font-size:12px; color:var(--muted); font-weight:700; margin-top:4px; }
+.login-card { margin:0 20px 32px; background:white; border-radius:28px; padding:28px 24px; box-shadow:0 8px 32px rgba(0,0,0,0.08); }
+.login-title { font-family:'Fredoka One',cursive; font-size:20px; color:var(--dark); margin-bottom:20px; text-align:center; }
+.role-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:24px; }
+.role-btn { padding:10px 4px; border:2px solid #eee; border-radius:14px; text-align:center; cursor:pointer; transition:all .2s; background:white; }
+.role-btn.sel-guru { border-color:var(--blue); background:#e8f2ff; }
+.role-btn.sel-ortu { border-color:var(--accent); background:#edf9f0; }
+.role-btn.sel-murid { border-color:var(--purple); background:#f5eaff; }
+.role-btn span { display:block; font-size:24px; margin-bottom:3px; }
+.role-btn b { font-size:11px; font-weight:800; color:var(--muted); }
+.role-btn.sel-guru b { color:var(--blue); }
+.role-btn.sel-ortu b { color:var(--accent); }
+.role-btn.sel-murid b { color:var(--purple); }
+.field { margin-bottom:16px; }
+.field label { font-size:12px; font-weight:800; color:var(--muted); display:block; margin-bottom:6px; letter-spacing:.3px; }
+.field input { width:100%; padding:14px 16px; border:2px solid #eee; border-radius:14px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:700; color:var(--dark); outline:none; transition:border .2s; background:#fafafa; }
+.field input:focus { border-color:var(--primary); background:white; }
+.btn-primary { width:100%; padding:16px; background:linear-gradient(135deg,var(--primary),#FF9A3C); color:white; border:none; border-radius:16px; font-family:'Nunito',sans-serif; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 20px rgba(255,107,107,0.35); transition:transform .15s, box-shadow .15s; letter-spacing:.3px; }
+.btn-primary:active { transform:scale(0.97); box-shadow:0 2px 10px rgba(255,107,107,0.2); }
+.login-err { color:#e53935; font-size:12px; font-weight:700; text-align:center; margin-top:10px; display:none; }
+.login-demo { background:#fff9e6; border-radius:12px; padding:10px 14px; margin-top:14px; font-size:11px; color:#888; font-weight:700; text-align:center; line-height:1.8; }
+.login-switch { text-align:center; margin-top:18px; font-size:13px; font-weight:700; color:var(--muted); }
+.login-switch a { color:var(--primary); cursor:pointer; text-decoration:none; font-weight:800; }
+
+/* ── REGISTER ── */
+#screen-register { background:linear-gradient(160deg,#FFF5F5 0%,#F6F2EC 100%); overflow-y:auto; }
+
+/* ── MAIN APP ── */
+#screen-app { flex-direction:column; }
+.app-header {
+  background:white;
+  padding: calc(var(--status-bar) + 14px) 20px 14px;
+  display:flex; align-items:center; justify-content:space-between;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  flex-shrink:0; z-index:10;
+}
+.header-logo { display:flex; align-items:center; gap:10px; }
+.header-logo img { width:36px; height:36px; border-radius:10px; object-fit:contain; }
+.header-school { font-family:'Fredoka One',cursive; font-size:16px; color:var(--dark); line-height:1.1; }
+.header-school small { font-family:'Nunito',sans-serif; font-size:10px; font-weight:800; color:var(--muted); display:block; }
+.header-user { display:flex; align-items:center; gap:8px; cursor:pointer; }
+.h-avatar { width:36px; height:36px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; flex-shrink:0; }
+.h-name { font-size:12px; font-weight:800; color:var(--dark); max-width:80px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.h-role { font-size:10px; font-weight:700; color:var(--muted); }
+
+/* ── TAB CONTENT ── */
+.tab-content { flex:1; overflow-y:auto; overflow-x:hidden; padding-bottom: calc(var(--bottom-nav-h) + var(--bottom-safe) + 8px); -webkit-overflow-scrolling:touch; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  height: calc(var(--bottom-nav-h) + var(--bottom-safe));
+  background:white;
+  border-top: 1.5px solid rgba(0,0,0,0.06);
+  display:flex; align-items:flex-start; justify-content:space-around;
+  padding-top:10px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  z-index:100;
+}
+.nav-tab { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:0 8px; min-width:52px; }
+.nav-tab-icon { font-size:22px; transition:transform .2s; }
+.nav-tab-label { font-size:9px; font-weight:800; color:var(--muted); letter-spacing:.2px; }
+.nav-tab.active .nav-tab-icon { transform:scale(1.1); }
+.nav-tab.active .nav-tab-label { color:var(--primary); }
+.nav-tab.active .nav-indicator { width:20px; height:3px; background:var(--primary); border-radius:2px; margin-bottom:-2px; }
+.nav-indicator { width:20px; height:3px; background:transparent; border-radius:2px; margin-bottom:-2px; }
+
+/* ── HOME TAB ── */
+.home-hero {
+  margin:16px 16px 0;
+  background: linear-gradient(135deg, var(--primary) 0%, #FF9A3C 100%);
+  border-radius:24px; padding:20px; color:white; position:relative; overflow:hidden;
+}
+.home-hero::after { content:'🌟'; position:absolute; right:-8px; top:-8px; font-size:80px; opacity:.15; }
+.home-hero-greet { font-size:13px; font-weight:700; opacity:.85; }
+.home-hero-name { font-family:'Fredoka One',cursive; font-size:24px; margin:2px 0 6px; }
+.home-hero-role { font-size:11px; font-weight:800; background:rgba(255,255,255,.25); display:inline-block; padding:3px 10px; border-radius:50px; }
+.home-section { padding:16px 16px 0; }
+.section-title { font-family:'Fredoka One',cursive; font-size:18px; color:var(--dark); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.section-title span { font-size:14px; color:var(--muted); font-family:'Nunito',sans-serif; font-weight:700; }
+.menu-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.menu-card {
+  background:white; border-radius:20px; padding:16px; cursor:pointer;
+  box-shadow:var(--shadow); transition:transform .15s, box-shadow .15s; 
+  display:flex; flex-direction:column; gap:8px;
+  border: 1.5px solid rgba(0,0,0,0.04);
+  -webkit-tap-highlight-color:transparent;
+}
+.menu-card:active { transform:scale(0.96); box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.menu-card-icon { font-size:32px; }
+.menu-card-label { font-size:14px; font-weight:900; color:var(--dark); }
+.menu-card-desc { font-size:11px; font-weight:700; color:var(--muted); }
+.stat-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.stat-card { background:white; border-radius:16px; padding:14px; box-shadow:var(--shadow); text-align:center; }
+.stat-num { font-family:'Fredoka One',cursive; font-size:28px; }
+.stat-lbl { font-size:11px; font-weight:800; color:var(--muted); margin-top:2px; }
+
+/* ── PANEL HEADERS ── */
+.panel-top { padding:16px 16px 0; }
+.panel-heading { font-family:'Fredoka One',cursive; font-size:22px; color:var(--dark); display:flex; align-items:center; gap:8px; }
+.panel-sub { font-size:12px; font-weight:700; color:var(--muted); margin-top:4px; }
+
+/* ── FORMS ── */
+.form-card { background:white; border-radius:20px; padding:20px; margin:12px 16px 0; box-shadow:var(--shadow); }
+.form-title { font-family:'Fredoka One',cursive; font-size:16px; color:var(--dark); margin-bottom:16px; }
+.form-row { margin-bottom:14px; }
+.form-row label { font-size:11px; font-weight:800; color:var(--muted); display:block; margin-bottom:5px; letter-spacing:.3px; }
+.form-row input, .form-row select, .form-row textarea {
+  width:100%; padding:12px 14px; border:2px solid #eee; border-radius:12px;
+  font-family:'Nunito',sans-serif; font-size:14px; font-weight:700; color:var(--dark);
+  outline:none; transition:border .2s; background:#fafafa; -webkit-appearance:none; appearance:none;
+}
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color:var(--primary); background:white; }
+.form-row textarea { min-height:90px; resize:none; }
+.btn-save { width:100%; padding:14px; background:linear-gradient(135deg,var(--primary),#FF9A3C); color:white; border:none; border-radius:14px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(255,107,107,.3); margin-top:4px; }
+.btn-save:active { transform:scale(0.98); }
+.btn-outline { width:100%; padding:12px; background:white; color:var(--primary); border:2px solid var(--primary); border-radius:14px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:900; cursor:pointer; margin-top:8px; }
+
+/* ── DATA CARDS ── */
+.data-list { padding:12px 16px 0; }
+.data-card { background:white; border-radius:16px; padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow); display:flex; align-items:center; gap:12px; }
+.data-card-icon { width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.data-card-body { flex:1; min-width:0; }
+.data-card-title { font-size:14px; font-weight:800; color:var(--dark); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.data-card-sub { font-size:11px; font-weight:700; color:var(--muted); margin-top:2px; }
+.data-card-badge { font-size:11px; font-weight:800; padding:3px 10px; border-radius:50px; flex-shrink:0; }
+.badge-hadir { background:#edf9f0; color:var(--accent); }
+.badge-sakit { background:#fff3f0; color:#FF6B6B; }
+.badge-izin { background:#fff9e6; color:#FF9A3C; }
+.badge-alfa { background:#f5eaff; color:var(--purple); }
+
+/* ── ABSENSI BULK ── */
+.absent-student { background:white; border-radius:14px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow); }
+.absent-name { flex:1; font-size:14px; font-weight:800; color:var(--dark); }
+.absent-btns { display:flex; gap:4px; }
+.abs-btn { padding:6px 10px; border:none; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; opacity:.5; transition:opacity .15s; }
+.abs-btn.sel { opacity:1; }
+.abs-H { background:#edf9f0; color:var(--accent); }
+.abs-S { background:#fff3f0; color:var(--primary); }
+.abs-I { background:#fff9e6; color:var(--orange); }
+.abs-A { background:#f5eaff; color:var(--purple); }
+
+/* ── NILAI CARDS ── */
+.nilai-card { background:white; border-radius:16px; padding:16px; margin-bottom:10px; box-shadow:var(--shadow); }
+.nilai-student { font-size:13px; font-weight:900; color:var(--dark); margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
+.nilai-mapel { font-size:11px; font-weight:700; color:var(--muted); }
+.nilai-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:8px; }
+.nilai-item { text-align:center; background:#f8f8f8; border-radius:10px; padding:6px 4px; }
+.nilai-val { font-family:'Fredoka One',cursive; font-size:18px; color:var(--dark); }
+.nilai-key { font-size:10px; font-weight:800; color:var(--muted); }
+.grade-chip { font-size:13px; font-weight:900; padding:4px 12px; border-radius:50px; }
+.grade-A { background:#edf9f0; color:var(--accent); }
+.grade-B { background:#e8f2ff; color:var(--blue); }
+.grade-C { background:#fff9e6; color:var(--orange); }
+.grade-D { background:#fff3f0; color:var(--primary); }
+
+/* ── RAPORT ── */
+.raport-card { background:white; margin:12px 16px 0; border-radius:24px; padding:20px; box-shadow:var(--shadow); }
+.raport-header-inner { text-align:center; border-bottom:2px dashed #eee; padding-bottom:16px; margin-bottom:16px; }
+.raport-school-name { font-family:'Fredoka One',cursive; font-size:18px; color:var(--primary); }
+.raport-logo-sm { width:50px; height:50px; object-fit:contain; border-radius:12px; margin:8px auto; display:block; }
+.raport-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.raport-info-item label { font-size:10px; font-weight:800; color:var(--muted); display:block; }
+.raport-info-item p { font-size:13px; font-weight:800; color:var(--dark); margin-top:2px; }
+.raport-table { width:100%; border-collapse:collapse; font-size:12px; }
+.raport-table th { background:var(--primary); color:white; padding:8px 6px; text-align:center; font-weight:800; }
+.raport-table td { padding:8px 6px; border-bottom:1px solid #f0f0f0; text-align:center; font-weight:700; }
+.raport-table tr:last-child td { border-bottom:none; }
+.raport-avg-row { background:linear-gradient(135deg,#FF6B6B,#FF9A3C); }
+.raport-avg-row td { color:white; font-weight:900; border:none; }
+
+/* ── PENGUMUMAN ── */
+.pengumuman-card { background:white; border-radius:16px; padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
+.pgm-kategori { font-size:10px; font-weight:800; padding:2px 8px; border-radius:50px; display:inline-block; margin-bottom:6px; }
+.pgm-penting { background:#fff0f0; color:var(--primary); }
+.pgm-info { background:#e8f2ff; color:var(--blue); }
+.pgm-acara { background:#edf9f0; color:var(--accent); }
+.pgm-judul { font-size:15px; font-weight:900; color:var(--dark); margin-bottom:6px; }
+.pgm-isi { font-size:12px; font-weight:700; color:var(--text); line-height:1.6; }
+.pgm-meta { font-size:10px; font-weight:800; color:var(--muted); margin-top:8px; }
+
+/* ── ARTIKEL ── */
+.artikel-card { background:white; border-radius:16px; overflow:hidden; margin-bottom:10px; box-shadow:var(--shadow); }
+.artikel-img { width:100%; height:140px; object-fit:cover; background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:56px; }
+.artikel-img img { width:100%; height:100%; object-fit:cover; }
+.artikel-body { padding:14px; }
+.artikel-cat { font-size:10px; font-weight:800; padding:2px 8px; border-radius:50px; background:#f5eaff; color:var(--purple); display:inline-block; margin-bottom:6px; }
+.artikel-judul { font-size:15px; font-weight:900; color:var(--dark); line-height:1.3; }
+.artikel-meta { font-size:11px; font-weight:700; color:var(--muted); margin-top:6px; }
+.artikel-isi-preview { font-size:12px; color:var(--text); line-height:1.6; margin-top:6px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; }
+
+/* ── ELEARNING ── */
+.el-card { background:white; border-radius:16px; padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow); display:flex; gap:12px; align-items:center; }
+.el-emoji { width:50px; height:50px; background:var(--bg); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+.el-body { flex:1; min-width:0; }
+.el-judul { font-size:14px; font-weight:900; color:var(--dark); }
+.el-mapel { font-size:11px; font-weight:700; color:var(--blue); margin-top:2px; }
+.el-desc { font-size:11px; font-weight:600; color:var(--muted); margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ── PROFILE ── */
+.profile-hero { margin:16px 16px 0; background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 100%); border-radius:24px; padding:24px; color:white; text-align:center; }
+.profile-avatar { width:72px; height:72px; border-radius:22px; background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 12px; }
+.profile-name { font-family:'Fredoka One',cursive; font-size:22px; }
+.profile-role-badge { display:inline-block; background:rgba(255,255,255,.25); padding:4px 14px; border-radius:50px; font-size:12px; font-weight:800; margin-top:6px; }
+.profile-section { margin:12px 16px 0; }
+.profile-item { background:white; border-radius:14px; padding:14px 16px; margin-bottom:8px; display:flex; align-items:center; gap:12px; box-shadow:var(--shadow); cursor:pointer; }
+.profile-item-icon { font-size:22px; width:40px; text-align:center; }
+.profile-item-text { flex:1; font-size:14px; font-weight:800; color:var(--dark); }
+.profile-item-arrow { font-size:16px; color:var(--muted); }
+.btn-logout { width:100%; padding:14px; background:white; color:var(--primary); border:2px solid var(--primary); border-radius:14px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:900; cursor:pointer; margin-top:8px; }
+.btn-logout:active { background:#fff3f0; }
+
+/* ── TOAST ── */
+.toast { position:fixed; bottom:calc(var(--bottom-nav-h) + var(--bottom-safe) + 12px); left:16px; right:16px; background:var(--dark); color:white; padding:12px 16px; border-radius:14px; font-size:13px; font-weight:800; text-align:center; z-index:9999; opacity:0; transform:translateY(12px); transition:all .25s; pointer-events:none; box-shadow:0 8px 24px rgba(0,0,0,.2); }
+.toast.show { opacity:1; transform:translateY(0); }
+.toast.success { background:var(--accent); }
+.toast.error { background:var(--primary); }
+
+/* ── LOADING ── */
+.loading-overlay { position:fixed; inset:0; background:rgba(246,242,236,.9); display:flex; align-items:center; justify-content:center; z-index:9998; display:none; flex-direction:column; gap:12px; }
+.loading-spinner { width:40px; height:40px; border:4px solid #eee; border-top-color:var(--primary); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-size:13px; font-weight:800; color:var(--muted); }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align:center; padding:48px 24px; }
+.empty-emoji { font-size:56px; margin-bottom:12px; }
+.empty-title { font-family:'Fredoka One',cursive; font-size:20px; color:var(--dark); }
+.empty-sub { font-size:13px; font-weight:700; color:var(--muted); margin-top:6px; }
+
+/* ── MODAL SHEET ── */
+.sheet-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; display:none; align-items:flex-end; }
+.sheet-overlay.show { display:flex; animation:fadeIn .2s; }
+.sheet-box { background:white; border-radius:24px 24px 0 0; width:100%; max-height:80vh; overflow-y:auto; padding:24px 20px calc(var(--bottom-safe) + 20px); animation:slideUp .3s cubic-bezier(0.34,1.1,0.64,1); }
+.sheet-handle { width:36px; height:4px; background:#e0e0e0; border-radius:2px; margin:0 auto 16px; }
+.sheet-title { font-family:'Fredoka One',cursive; font-size:18px; color:var(--dark); margin-bottom:16px; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+/* Scrollbar hide */
+::-webkit-scrollbar { display:none; }
+
+/* ── FILTER CHIPS ── */
+.chip-row { display:flex; gap:8px; overflow-x:auto; padding:0 16px; margin-bottom:4px; }
+.chip { padding:7px 14px; border-radius:50px; font-size:12px; font-weight:800; cursor:pointer; white-space:nowrap; border:2px solid #eee; background:white; color:var(--muted); transition:all .15s; flex-shrink:0; }
+.chip.active { background:var(--primary); color:white; border-color:var(--primary); }
+
+/* ── PULL REFRESH INDICATOR ── */
+.refresh-indicator { text-align:center; padding:10px; font-size:12px; font-weight:800; color:var(--muted); display:none; }
+
+.abs-stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:0 16px; margin-bottom:4px; }
+.abs-stat { background:white; border-radius:12px; padding:10px 4px; text-align:center; box-shadow:var(--shadow); }
+.abs-stat-num { font-family:'Fredoka One',cursive; font-size:22px; }
+.abs-stat-lbl { font-size:9px; font-weight:800; color:var(--muted); }
+
+/* register page reuse login styles */
+#screen-register .login-top, #screen-register .login-card { display:block; }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="screen active" id="screen-splash">
+  <div class="splash-logo">
+    <img src="https://raw.githubusercontent.com/rbba-alfatih/rbba/main/logo.png" alt="Al Fatih" onerror="this.style.display='none';this.parentElement.textContent='🌟'">
+  </div>
+  <div class="splash-title">Al Fatih</div>
+  <div class="splash-sub">Rumah Bermain & Belajar</div>
+  <div class="splash-dots">
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="screen" id="screen-login">
+  <div class="login-top">
+    <div class="login-logo">
+      <img src="https://raw.githubusercontent.com/rbba-alfatih/rbba/main/logo.png" alt="" onerror="this.style.display='none';this.parentElement.textContent='🌟'">
+    </div>
+    <div class="login-school">Rumah Bermain &<br>Belajar Al Fatih</div>
+    <div class="login-tagline">📍 Tambun Utara, Bekasi</div>
+  </div>
+  <div class="login-card">
+    <div class="login-title">👋 Masuk Portal</div>
+    <div class="role-row">
+      <div class="role-btn" id="lb-guru" onclick="selLoginRole('guru')"><span>👨‍🏫</span><b>Guru</b></div>
+      <div class="role-btn" id="lb-ortu" onclick="selLoginRole('ortu')"><span>👨‍👩‍👧</span><b>Orang Tua</b></div>
+      <div class="role-btn" id="lb-murid" onclick="selLoginRole('murid')"><span>👦</span><b>Murid</b></div>
+    </div>
+    <div class="field"><label>EMAIL / NAMA</label><input type="email" id="l-email" placeholder="email@alfatih.id" autocomplete="username"></div>
+    <div class="field"><label>PASSWORD</label><input type="password" id="l-pass" placeholder="••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn-primary" onclick="doLogin()">🚀 Masuk Sekarang</button>
+    <div class="login-err" id="l-err">❌ Email/password salah atau peran tidak sesuai.</div>
+    <div class="login-demo">
+      <strong>Demo:</strong><br>
+      Guru: guru@alfatih.id / guru123<br>
+      Ortu: ortu@alfatih.id / ortu123<br>
+      Murid: murid@alfatih.id / murid123
+    </div>
+  </div>
+  <div class="login-switch">Belum punya akun? <a onclick="showScreen('screen-register')">Daftar di sini</a></div>
+</div>
+
+<!-- REGISTER -->
+<div class="screen" id="screen-register">
+  <div class="login-top">
+    <div style="font-size:28px;text-align:center;margin-bottom:8px">✨</div>
+    <div class="login-school" style="text-align:center">Buat Akun</div>
+    <div class="login-tagline" style="text-align:center">Pendaftaran untuk Orang Tua & Murid</div>
+  </div>
+  <div class="login-card">
+    <div class="role-row" style="grid-template-columns:1fr 1fr">
+      <div class="role-btn" id="rb-ortu" onclick="selRegRole('ortu')"><span>👨‍👩‍👧</span><b>Orang Tua</b></div>
+      <div class="role-btn" id="rb-murid" onclick="selRegRole('murid')"><span>👦</span><b>Murid</b></div>
+    </div>
+    <div class="field"><label>NAMA LENGKAP</label><input type="text" id="r-nama" placeholder="Nama lengkap..."></div>
+    <div class="field"><label>EMAIL</label><input type="email" id="r-email" placeholder="email@example.com"></div>
+    <div class="field" id="r-anak-wrap"><label>NAMA ANAK</label><input type="text" id="r-anak" placeholder="Nama anak..."></div>
+    <div class="field" id="r-kelas-wrap" style="display:none">
+      <label>KELAS</label>
+      <select id="r-kelas">
+        <option>Kelas Bermain</option><option>Kelas Calistung</option>
+        <option>Kelas 1 SD</option><option>Kelas 2 SD</option><option>Kelas 3 SD</option>
+      </select>
+    </div>
+    <div class="field"><label>PASSWORD</label><input type="password" id="r-pass" placeholder="Min. 6 karakter..."></div>
+    <div class="field"><label>ULANGI PASSWORD</label><input type="password" id="r-pass2" placeholder="Ulangi password..."></div>
+    <button class="btn-primary" onclick="doRegister()">🎉 Daftar Sekarang</button>
+    <div class="login-err" id="r-err">Mohon periksa kembali data Anda.</div>
+  </div>
+  <div class="login-switch">Sudah punya akun? <a onclick="showScreen('screen-login')">Masuk di sini</a></div>
+</div>
+
+<!-- MAIN APP -->
+<div class="screen" id="screen-app">
+  <!-- Header -->
+  <div class="app-header">
+    <div class="header-logo">
+      <img src="https://raw.githubusercontent.com/rbba-alfatih/rbba/main/logo.png" alt="" onerror="this.style.display='none'">
+      <div>
+        <div class="header-school">Al Fatih<small>Portal Belajar</small></div>
+      </div>
+    </div>
+    <div class="header-user" onclick="switchTab('tab-profile')">
+      <div>
+        <div class="h-name" id="h-name">–</div>
+        <div class="h-role" id="h-role">–</div>
+      </div>
+      <div class="h-avatar" id="h-avatar" style="background:var(--blue)">👤</div>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content" id="tab-home">
+    <div class="refresh-indicator" id="refresh-ind">⟳ Memperbarui data...</div>
+    <!-- dynamic -->
+  </div>
+  <div class="tab-content" id="tab-absensi" style="display:none"></div>
+  <div class="tab-content" id="tab-nilai" style="display:none"></div>
+  <div class="tab-content" id="tab-info" style="display:none"></div>
+  <div class="tab-content" id="tab-profile" style="display:none"></div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav" id="bottom-nav">
+    <div class="nav-tab active" id="nav-home" onclick="switchTab('tab-home')">
+      <div class="nav-indicator"></div>
+      <div class="nav-tab-icon">🏠</div>
+      <div class="nav-tab-label">Beranda</div>
+    </div>
+    <div class="nav-tab" id="nav-absensi" onclick="switchTab('tab-absensi')">
+      <div class="nav-indicator"></div>
+      <div class="nav-tab-icon">📅</div>
+      <div class="nav-tab-label">Absensi</div>
+    </div>
+    <div class="nav-tab" id="nav-nilai" onclick="switchTab('tab-nilai')">
+      <div class="nav-indicator"></div>
+      <div class="nav-tab-icon">📊</div>
+      <div class="nav-tab-label">Nilai</div>
+    </div>
+    <div class="nav-tab" id="nav-info" onclick="switchTab('tab-info')">
+      <div class="nav-indicator"></div>
+      <div class="nav-tab-icon">📢</div>
+      <div class="nav-tab-label">Info</div>
+    </div>
+    <div class="nav-tab" id="nav-profile" onclick="switchTab('tab-profile')">
+      <div class="nav-indicator"></div>
+      <div class="nav-tab-icon">👤</div>
+      <div class="nav-tab-label">Profil</div>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Memuat data...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- SHEET MODAL -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="closeSheet()">
+  <div class="sheet-box" id="sheet-box" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div id="sheet-content"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzY8PvQRS7QVKwt3iJ1f-re4R2RPK6wpB2W8u4eD95A2sLUfL3PvfhYySufPkVZMkld/exec';
+const MASTER_EMAIL = 'guru@alfatih.id';
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let currentUser = null;
+let loginRole = 'guru';
+let regRole = 'ortu';
+let activeTab = 'tab-home';
+
+let dataSiswa = [], dataAbsensi = [], dataNilai = [], dataPengumuman = [];
+let dataElearn = [], dataArtikel = [], dataAkun = [];
+let dataKelasList = ['Kelas Bermain','Kelas Calistung','Kelas 1 SD','Kelas 2 SD','Kelas 3 SD'];
+let dataMapelList = ['Matematika','Bahasa Indonesia','IPA','IPS','Pendidikan Agama Islam','Calistung'];
+let dataIzinRaport = {};
+let ortuSelectedAnak = null;
+
+const defaultUsers = [
+  { id:'master-1', email:'guru@alfatih.id', pass:'guru123', nama:'Amih Fatih', role:'guru', mapel:'Semua Mata Pelajaran', isMaster:true },
+  { id:'demo-ortu', email:'ortu@alfatih.id', pass:'ortu123', nama:'Bapak Budi', role:'ortu', anak:'Ahmad Fatih' },
+  { id:'demo-murid', email:'murid@alfatih.id', pass:'murid123', nama:'Ahmad Fatih', role:'murid', kelas:'Kelas Calistung' },
+];
+let users = [...defaultUsers];
+
+// ══════════════════════════════════════════════
+//  STORAGE HELPERS
+// ══════════════════════════════════════════════
+function ls(k, def) { try { const v = localStorage.getItem('alfatih_'+k); return v ? JSON.parse(v) : def; } catch(e){ return def; } }
+function ss(k, v) { try { localStorage.setItem('alfatih_'+k, JSON.stringify(v)); } catch(e){} }
+
+function loadAll() {
+  const sv = ls('users', []);
+  sv.forEach(u => { if(!users.find(x=>x.email===u.email)) users.push(u); });
+  dataSiswa = ls('siswa', []);
+  dataAbsensi = ls('absensi', []);
+  dataNilai = ls('nilai', []);
+  dataPengumuman = ls('pengumuman', []);
+  dataElearn = ls('elearn', []);
+  dataArtikel = ls('artikel', []);
+  dataIzinRaport = ls('izinRaport', {});
+  dataKelasList = ls('kelasList', dataKelasList);
+  dataMapelList = ls('mapelList', dataMapelList);
+}
+
+// ══════════════════════════════════════════════
+//  SHEETS SYNC
+// ══════════════════════════════════════════════
+function sheetsPost(payload) {
+  if(!SHEETS_URL) return;
+  const body = new URLSearchParams();
+  body.set('payload', JSON.stringify(payload));
+  fetch(SHEETS_URL, { method:'POST', mode:'no-cors', body }).catch(()=>{});
+}
+
+function sheetsGet(sheet) {
+  return fetch(SHEETS_URL + '?sheet=' + sheet)
+    .then(r => r.json())
+    .catch(() => ({ status:'error' }));
+}
+
+function syncAppend(sheetKey, item) {
+  sheetsPost({ action:'append', sheet:sheetKey, data:buildRow(sheetKey, item) });
+}
+function syncDelete(sheetKey, id) {
+  sheetsPost({ action:'deleteRow', sheet:sheetKey, id });
+}
+
+function buildRow(k, i) {
+  switch(k) {
+    case 'siswa':     return [i.id, i.nama, i.kelas, i.ortu||'', i.hp||'', i.waktu||''];
+    case 'absensi':   return [i.id, i.tanggal||'', i.siswa||'', i.kelas||'', i.status||'', i.ket||'', i.guru||'—', i.waktu||''];
+    case 'nilai':     return [i.id, i.siswa||'', i.mapel||'', i.tugas||0, i.uts||0, i.uas||0, i.avg||'', i.grade||'', i.guru||'—', i.waktu||''];
+    case 'pengumuman':return [i.id, i.judul||'', i.kategori||'', i.target||'Semua', i.isi||'', i.tanggal||'', i.penulis||'', i.waktu||''];
+    case 'elearn':    return [i.id, i.judul||'', i.mapel||'', i.desc||'', i.emoji||'📚', i.guru||'', i.waktu||''];
+    case 'akun':      return [i.id, i.nama||'', i.email||'', i.pass||'', i.role||'', i.anak||'', i.kelas||'', i.mapel||'', i.waktu||''];
+    default: return [i.id];
+  }
+}
+
+function normalizeRow(k, row) {
+  const maps = {
+    siswa:      {'ID':'id','Nama':'nama','Kelas':'kelas','Nama Orang Tua':'ortu','No HP':'hp','Waktu Input':'waktu'},
+    absensi:    {'ID':'id','Tanggal':'tanggal','Nama Siswa':'siswa','Kelas':'kelas','Status':'status','Keterangan':'ket','Guru':'guru','Waktu Input':'waktu'},
+    nilai:      {'ID':'id','Nama Siswa':'siswa','Mata Pelajaran':'mapel','Tugas':'tugas','UTS':'uts','UAS':'uas','Rata-rata':'avg','Grade':'grade','Guru':'guru','Waktu Input':'waktu'},
+    pengumuman: {'ID':'id','Judul':'judul','Kategori':'kategori','Target':'target','Isi':'isi','Tanggal':'tanggal','Penulis':'penulis','Waktu Input':'waktu'},
+    elearn:     {'ID':'id','Judul':'judul','Mata Pelajaran':'mapel','Deskripsi':'desc','Emoji':'emoji','Guru':'guru','Waktu Input':'waktu'},
+    akun:       {'ID':'id','Nama':'nama','Email':'email','Password':'pass','Role':'role','Nama Anak':'anak','Kelas':'kelas','Mata Pelajaran':'mapel','Waktu Daftar':'waktu'},
+  };
+  const m = maps[k] || {};
+  const out = {};
+  Object.keys(row).forEach(key => { out[m[key] || key] = row[key]; });
+  return out;
+}
+
+async function syncFromSheets() {
+  showLoading(true);
+  const keys = ['siswa','absensi','nilai','pengumuman','elearn','akun'];
+  const tasks = keys.map(k => sheetsGet(k).then(res => {
+    if(res.status==='ok' && Array.isArray(res.data)) {
+      const fromSheets = res.data.map(r => normalizeRow(k, r));
+      if(k === 'akun') {
+        fromSheets.forEach(su => { if(su.email && !users.find(u=>u.email===su.email)) users.push(su); });
+        ss('users', users.filter(u=>!defaultUsers.find(d=>d.email===u.email)));
+      } else {
+        const localData = eval('data'+k.charAt(0).toUpperCase()+k.slice(1)) || [];
+        const sheetsIds = fromSheets.map(r=>String(r.id));
+        const localOnly = localData.filter(r=>!sheetsIds.includes(String(r.id)));
+        localOnly.forEach(item => syncAppend(k, item));
+        const merged = fromSheets.concat(localOnly);
+        eval('data'+k.charAt(0).toUpperCase()+k.slice(1)+' = merged');
+        ss(k, merged);
+      }
+    }
+  }).catch(()=>{}));
+  
+  // Load kelasList & mapelList
+  tasks.push(sheetsGet('kelasList').then(res=>{
+    if(res.status==='ok' && Array.isArray(res.data) && res.data.length) {
+      const list = res.data.map(r=>Object.values(r)[0]).filter(Boolean);
+      if(list.length) { dataKelasList = list; ss('kelasList', list); }
+    }
+  }).catch(()=>{}));
+  tasks.push(sheetsGet('mapelList').then(res=>{
+    if(res.status==='ok' && Array.isArray(res.data) && res.data.length) {
+      const list = res.data.map(r=>Object.values(r)[0]).filter(Boolean);
+      if(list.length) { dataMapelList = list; ss('mapelList', list); }
+    }
+  }).catch(()=>{}));
+
+  await Promise.all(tasks);
+  showLoading(false);
+  renderCurrentTab();
+  showToast('✅ Data diperbarui!', 'success');
+}
+
+// ══════════════════════════════════════════════
+//  SCREENS
+// ══════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════
+function selLoginRole(role) {
+  loginRole = role;
+  ['guru','ortu','murid'].forEach(r => {
+    const el = document.getElementById('lb-'+r);
+    if(el) el.className = 'role-btn' + (r===role ? ' sel-'+r : '');
+  });
+}
+
+function selRegRole(role) {
+  regRole = role;
+  ['ortu','murid'].forEach(r => {
+    const el = document.getElementById('rb-'+r);
+    if(el) el.className = 'role-btn' + (r===role ? ' sel-'+r : '');
+  });
+  document.getElementById('r-anak-wrap').style.display = role==='ortu'?'block':'none';
+  document.getElementById('r-kelas-wrap').style.display = role==='murid'?'block':'none';
+}
+
+function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  const err = document.getElementById('l-err');
+  err.style.display = 'none';
+  const user = users.find(u => (u.email===email || (u.nama||'').toLowerCase()===email.toLowerCase()) && u.pass===pass && u.role===loginRole);
+  if(!user) { err.style.display='block'; return; }
+  loginUser(user);
+}
+
+function doRegister() {
+  const nama = document.getElementById('r-nama').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const pass = document.getElementById('r-pass').value;
+  const pass2 = document.getElementById('r-pass2').value;
+  const err = document.getElementById('r-err');
+  err.style.display = 'none';
+  if(!nama||!email||!pass||pass.length<6) { err.style.display='block'; err.textContent='Semua field wajib diisi (min. 6 karakter).'; return; }
+  if(pass!==pass2) { err.style.display='block'; err.textContent='Password tidak cocok.'; return; }
+  if(users.find(u=>u.email===email)) { err.style.display='block'; err.textContent='Email sudah terdaftar.'; return; }
+  const waktu = new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  const newUser = { id:Date.now(), email, pass, nama, role:regRole, waktu };
+  if(regRole==='ortu') newUser.anak = document.getElementById('r-anak').value||'—';
+  if(regRole==='murid') newUser.kelas = document.getElementById('r-kelas').value||'Kelas Bermain';
+  users.push(newUser);
+  ss('users', users.filter(u=>!defaultUsers.find(d=>d.email===u.email)));
+  syncAppend('akun', newUser);
+  loginUser(newUser);
+  showToast('🎉 Akun berhasil dibuat!', 'success');
+}
+
+function loginUser(user) {
+  currentUser = user;
+  // Update header
+  document.getElementById('h-name').textContent = user.nama;
+  const roleLabel = {guru:'👨‍🏫 Guru', ortu:'👨‍👩‍👧 Orang Tua', murid:'👦 Murid'};
+  document.getElementById('h-role').textContent = user.isMaster?'👑 Master Admin':(roleLabel[user.role]||user.role);
+  const av = document.getElementById('h-avatar');
+  av.textContent = user.isMaster?'👑':user.role==='guru'?'👨‍🏫':user.role==='ortu'?'👨‍👩‍👧':'👦';
+  av.style.background = user.role==='guru'?'var(--blue)':user.role==='ortu'?'var(--accent)':'var(--purple)';
+  if(user.isMaster) av.style.background='linear-gradient(135deg,#FF6B6B,#FFD93D)';
+  showScreen('screen-app');
+  switchTab('tab-home');
+  syncFromSheets();
+  showToast('👋 Halo '+user.nama+'!', 'success');
+}
+
+function doLogout() {
+  currentUser = null;
+  ortuSelectedAnak = null;
+  showScreen('screen-login');
+  showToast('👋 Sampai jumpa!', '');
+}
+
+// ══════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════
+function switchTab(tabId) {
+  activeTab = tabId;
+  document.querySelectorAll('.tab-content').forEach(t => t.style.display='none');
+  document.querySelectorAll('.nav-tab').forEach(n => {
+    n.classList.remove('active');
+    n.querySelector('.nav-indicator').style.background='transparent';
+  });
+  document.getElementById(tabId).style.display='block';
+  document.getElementById(tabId).scrollTop = 0;
+  const navId = 'nav-' + tabId.replace('tab-','');
+  const navEl = document.getElementById(navId);
+  if(navEl) { navEl.classList.add('active'); navEl.querySelector('.nav-indicator').style.background='var(--primary)'; }
+  renderCurrentTab();
+}
+
+function renderCurrentTab() {
+  switch(activeTab) {
+    case 'tab-home':     renderHome(); break;
+    case 'tab-absensi':  renderAbsensi(); break;
+    case 'tab-nilai':    renderNilai(); break;
+    case 'tab-info':     renderInfo(); break;
+    case 'tab-profile':  renderProfile(); break;
+  }
+}
+
+// ══════════════════════════════════════════════
+//  HOME
+// ══════════════════════════════════════════════
+function renderHome() {
+  const u = currentUser;
+  if(!u) return;
+  const tab = document.getElementById('tab-home');
+  const roleMenus = {
+    guru: [
+      {icon:'📅',label:'Absensi',desc:'Input kehadiran siswa',tab:'tab-absensi'},
+      {icon:'📊',label:'Nilai',desc:'Input & lihat nilai',tab:'tab-nilai'},
+      {icon:'📋',label:'Raport',desc:'Cetak raport digital',action:'openRaportSheet'},
+      {icon:'👥',label:'Data Siswa',desc:'Kelola data siswa',action:'openSiswaSheet'},
+      {icon:'📢',label:'Pengumuman',desc:'Buat pengumuman',tab:'tab-info'},
+      {icon:'📰',label:'Artikel',desc:'Tulis artikel',action:'openArtikelSheet'},
+      {icon:'💻',label:'E-Learning',desc:'Upload materi',action:'openElSheet'},
+      ...(u.isMaster?[{icon:'👑',label:'Kelola Akun',desc:'Tambah & hapus akun',action:'openAkunSheet'}]:[]),
+    ],
+    ortu: [
+      {icon:'📅',label:'Absensi Anak',desc:'Pantau kehadiran',tab:'tab-absensi'},
+      {icon:'📊',label:'Nilai Anak',desc:'Lihat nilai pelajaran',tab:'tab-nilai'},
+      {icon:'📋',label:'Raport',desc:'Raport digital anak',action:'openRaportSheet'},
+      {icon:'📢',label:'Pengumuman',desc:'Info terbaru sekolah',tab:'tab-info'},
+      {icon:'📰',label:'Artikel',desc:'Kegiatan belajar',action:'openArtikelSheet'},
+      {icon:'💬',label:'Chat Guru',desc:'Hubungi via WA',action:"window.open('https://wa.me/6288715188778','_blank')"},
+    ],
+    murid: [
+      {icon:'📅',label:'Absensi Saya',desc:'Catatan kehadiran',tab:'tab-absensi'},
+      {icon:'📊',label:'Nilai Saya',desc:'Lihat nilai pelajaran',tab:'tab-nilai'},
+      {icon:'📋',label:'Raport Saya',desc:'Hasil belajarku',action:'openRaportSheet'},
+      {icon:'📢',label:'Pengumuman',desc:'Info dari sekolah',tab:'tab-info'},
+      {icon:'💻',label:'Belajar Online',desc:'Materi pelajaran',action:'openElSheet'},
+      {icon:'📰',label:'Artikel',desc:'Baca kegiatan',action:'openArtikelSheet'},
+    ],
+  };
+  const menus = roleMenus[u.role] || [];
+  const today = new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
+  
+  // Stats
+  let statHtml = '';
+  if(u.role === 'guru') {
+    const totalSiswa = dataSiswa.length;
+    const todayStr = new Date().toISOString().slice(0,10);
+    const hadirHari = dataAbsensi.filter(a=>a.tanggal===todayStr&&a.status==='Hadir').length;
+    statHtml = `<div class="home-section"><div class="section-title">📈 Statistik <span>Hari ini</span></div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num" style="color:var(--blue)">${totalSiswa}</div><div class="stat-lbl">Total Siswa</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--accent)">${hadirHari}</div><div class="stat-lbl">Hadir Hari Ini</div></div>
+      </div></div>`;
+  } else if(u.role === 'ortu') {
+    const anakName = (u.anak||'').split(',')[0].trim();
+    const anakAbs = dataAbsensi.filter(a=>a.siswa===anakName);
+    const hadir = anakAbs.filter(a=>a.status==='Hadir').length;
+    const anakNilai = dataNilai.filter(n=>n.siswa===anakName);
+    const avgVal = anakNilai.length ? Math.round(anakNilai.reduce((s,n)=>{const v=parseFloat(((parseFloat(n.tugas||0)+parseFloat(n.uts||0)+parseFloat(n.uas||0))/3).toFixed(1));return s+v;},0)/anakNilai.length) : 0;
+    statHtml = `<div class="home-section"><div class="section-title">📈 Rekap ${anakName||'Anak'}</div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num" style="color:var(--accent)">${hadir}</div><div class="stat-lbl">Kehadiran</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--blue)">${avgVal||'–'}</div><div class="stat-lbl">Rata-rata Nilai</div></div>
+      </div></div>`;
+  } else {
+    const myAbs = dataAbsensi.filter(a=>a.siswa===u.nama);
+    const hadir = myAbs.filter(a=>a.status==='Hadir').length;
+    const myNilai = dataNilai.filter(n=>n.siswa===u.nama);
+    const avgVal = myNilai.length ? Math.round(myNilai.reduce((s,n)=>{const v=parseFloat(((parseFloat(n.tugas||0)+parseFloat(n.uts||0)+parseFloat(n.uas||0))/3).toFixed(1));return s+v;},0)/myNilai.length) : 0;
+    statHtml = `<div class="home-section"><div class="section-title">📈 Rekap Saya</div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num" style="color:var(--accent)">${hadir}</div><div class="stat-lbl">Kehadiran</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--blue)">${avgVal||'–'}</div><div class="stat-lbl">Rata-rata Nilai</div></div>
+      </div></div>`;
+  }
+
+  // Pengumuman terbaru
+  const pgm = dataPengumuman.slice(-2).reverse();
+  const pgmHtml = pgm.length ? `<div class="home-section"><div class="section-title">📢 Pengumuman <span onclick="switchTab('tab-info')" style="cursor:pointer;color:var(--primary)">Lihat semua →</span></div>
+    ${pgm.map(p=>`<div class="pengumuman-card" onclick="switchTab('tab-info')">
+      <span class="pgm-kategori pgm-${p.kategori||'info'}">${p.kategori||'info'}</span>
+      <div class="pgm-judul">${p.judul||''}</div>
+      <div class="pgm-meta">${p.tanggal||''} · ${p.penulis||''}</div>
+    </div>`).join('')}
+  </div>` : '';
+
+  tab.innerHTML = `
+    <div class="home-hero">
+      <div class="home-hero-greet">☀️ ${today}</div>
+      <div class="home-hero-name">${u.nama}${u.isMaster?' 👑':''}</div>
+      <span class="home-hero-role">${u.isMaster?'Master Admin':u.role==='guru'?'👨‍🏫 Guru':u.role==='ortu'?'👨‍👩‍👧 Orang Tua':'👦 Murid'}</span>
+    </div>
+    ${statHtml}
+    <div class="home-section">
+      <div class="section-title">⚡ Menu Utama</div>
+      <div class="menu-grid">${menus.map(m=>`
+        <div class="menu-card" onclick="${m.tab?`switchTab('${m.tab}')`:m.action+'()'}">
+          <div class="menu-card-icon">${m.icon}</div>
+          <div class="menu-card-label">${m.label}</div>
+          <div class="menu-card-desc">${m.desc}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    ${pgmHtml}
+    <div style="height:16px"></div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+//  ABSENSI
+// ══════════════════════════════════════════════
+let absDate = new Date().toISOString().slice(0,10);
+let absKelas = '';
+let absBulkStatus = {};
+
+function renderAbsensi() {
+  const u = currentUser;
+  const tab = document.getElementById('tab-absensi');
+  if(!u) return;
+
+  if(u.role === 'guru') {
+    if(!absKelas && dataKelasList.length) absKelas = dataKelasList[0];
+    const siswaDiKelas = dataSiswa.filter(s=>s.kelas===absKelas);
+    const statusMap = {'Hadir':'H','Sakit':'S','Izin':'I','Alfa':'A'};
+    const colorMap = {H:'#6BCB77',S:'#FF6B6B',I:'#FF9A3C',A:'#C77DFF'};
+    const bgMap = {H:'#edf9f0',S:'#fff3f0',I:'#fff9e6',A:'#f5eaff'};
+
+    tab.innerHTML = `
+      <div class="panel-top"><div class="panel-heading">📅 Input Absensi</div><div class="panel-sub">Catat kehadiran siswa</div></div>
+      <div class="form-card">
+        <div class="form-row"><label>📆 TANGGAL</label><input type="date" id="abs-date" value="${absDate}" onchange="absDate=this.value;renderAbsensi()"></div>
+        <div class="form-row"><label>🏫 KELAS</label><select id="abs-kelas" onchange="absKelas=this.value;renderAbsensi()">
+          ${dataKelasList.map(k=>`<option value="${k}"${k===absKelas?' selected':''}>${k}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="data-list">
+        <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--dark);padding:0 0 8px">👥 ${siswaDiKelas.length} Siswa · ${absKelas}</div>
+        ${siswaDiKelas.length===0?`<div class="empty-state"><div class="empty-emoji">👥</div><div class="empty-title">Belum ada siswa</div><div class="empty-sub">di ${absKelas}</div></div>`
+        :siswaDiKelas.map(s=>{
+          const curSel = absBulkStatus[s.id] || '';
+          return `<div class="absent-student">
+            <div class="absent-name">${s.nama}</div>
+            <div class="absent-btns">
+              ${['H','S','I','A'].map(st=>`<button class="abs-btn abs-${st}${curSel===st?' sel':''}" onclick="setAbsStatus('${s.id}','${st}','${s.nama}')">${st}</button>`).join('')}
+            </div>
+          </div>`;
+        }).join('')}
+        ${siswaDiKelas.length>0?`<button class="btn-save" onclick="simpanAbsensi()" style="margin-top:8px">💾 Simpan Semua Absensi</button>`:''}
+      </div>
+      <div style="padding:16px 16px 0"><div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--dark);margin-bottom:8px">📋 Riwayat Absensi</div>
+      ${dataAbsensi.slice().reverse().slice(0,20).map(a=>`
+        <div class="data-card">
+          <div class="data-card-icon" style="background:${a.status==='Hadir'?'#edf9f0':a.status==='Sakit'?'#fff3f0':a.status==='Izin'?'#fff9e6':'#f5eaff'}">${a.status==='Hadir'?'✅':a.status==='Sakit'?'🤒':a.status==='Izin'?'📝':'❌'}</div>
+          <div class="data-card-body"><div class="data-card-title">${a.siswa}</div><div class="data-card-sub">${a.tanggal} · ${a.kelas}</div></div>
+          <span class="data-card-badge badge-${(a.status||'').toLowerCase()}">${a.status}</span>
+        </div>`).join('')}
+      </div>`;
+  } else {
+    // Ortu / Murid — view only
+    const targetName = u.role==='ortu' ? (ortuSelectedAnak||(u.anak||'').split(',')[0].trim()) : u.nama;
+    const myAbs = dataAbsensi.filter(a=>a.siswa===targetName).slice().reverse();
+    const hadir = myAbs.filter(a=>a.status==='Hadir').length;
+    const sakit = myAbs.filter(a=>a.status==='Sakit').length;
+    const izin  = myAbs.filter(a=>a.status==='Izin').length;
+    const alfa  = myAbs.filter(a=>a.status==='Alfa').length;
+    
+    // Ortu multi-anak selector
+    let anakSel = '';
+    if(u.role==='ortu') {
+      const anakList = (u.anak||'').split(',').map(a=>a.trim()).filter(Boolean);
+      if(anakList.length>1) anakSel = `<div class="chip-row" style="margin:12px 0 0">${anakList.map(a=>`<div class="chip${(ortuSelectedAnak||anakList[0])===a?' active':''}" onclick="ortuSelectedAnak='${a}';renderAbsensi()">${a}</div>`).join('')}</div>`;
+    }
+
+    tab.innerHTML = `
+      <div class="panel-top"><div class="panel-heading">📅 Absensi ${targetName}</div><div class="panel-sub">Rekap kehadiran</div></div>
+      ${anakSel}
+      <div class="abs-stat-row" style="margin:12px 0 0">
+        <div class="abs-stat"><div class="abs-stat-num" style="color:var(--accent)">${hadir}</div><div class="abs-stat-lbl">Hadir</div></div>
+        <div class="abs-stat"><div class="abs-stat-num" style="color:var(--primary)">${sakit}</div><div class="abs-stat-lbl">Sakit</div></div>
+        <div class="abs-stat"><div class="abs-stat-num" style="color:var(--orange)">${izin}</div><div class="abs-stat-lbl">Izin</div></div>
+        <div class="abs-stat"><div class="abs-stat-num" style="color:var(--purple)">${alfa}</div><div class="abs-stat-lbl">Alfa</div></div>
+      </div>
+      <div class="data-list">
+        ${myAbs.length===0?`<div class="empty-state"><div class="empty-emoji">📅</div><div class="empty-title">Belum ada data</div><div class="empty-sub">Absensi akan muncul di sini</div></div>`
+        :myAbs.map(a=>`<div class="data-card">
+          <div class="data-card-icon" style="background:${a.status==='Hadir'?'#edf9f0':a.status==='Sakit'?'#fff3f0':a.status==='Izin'?'#fff9e6':'#f5eaff'}">${a.status==='Hadir'?'✅':a.status==='Sakit'?'🤒':a.status==='Izin'?'📝':'❌'}</div>
+          <div class="data-card-body"><div class="data-card-title">${a.tanggal}</div><div class="data-card-sub">${a.kelas}${a.ket?' · '+a.ket:''}</div></div>
+          <span class="data-card-badge badge-${(a.status||'hadir').toLowerCase()}">${a.status}</span>
+        </div>`).join('')}
+      </div>`;
+  }
+}
+
+function setAbsStatus(id, status, nama) {
+  const fullMap = {H:'Hadir',S:'Sakit',I:'Izin',A:'Alfa'};
+  absBulkStatus[id] = status;
+  renderAbsensi();
+}
+
+function simpanAbsensi() {
+  if(!Object.keys(absBulkStatus).length) { showToast('⚠️ Belum ada status yang dipilih',''); return; }
+  const waktu = new Date().toLocaleString('id-ID');
+  const siswaDiKelas = dataSiswa.filter(s=>s.kelas===absKelas);
+  let saved = 0;
+  siswaDiKelas.forEach(s=>{
+    const st = absBulkStatus[s.id];
+    if(!st) return;
+    const fullMap = {H:'Hadir',S:'Sakit',I:'Izin',A:'Alfa'};
+    const existing = dataAbsensi.findIndex(a=>a.tanggal===absDate&&a.siswa===s.nama);
+    const rec = { id:Date.now()+''+s.id, tanggal:absDate, siswa:s.nama, kelas:absKelas, status:fullMap[st], ket:'', guru:currentUser.nama, waktu };
+    if(existing>=0) {
+      dataAbsensi[existing] = rec;
+      syncDelete('absensi', dataAbsensi[existing].id);
+    } else { dataAbsensi.push(rec); }
+    syncAppend('absensi', rec);
+    saved++;
+  });
+  ss('absensi', dataAbsensi);
+  absBulkStatus = {};
+  showToast(`✅ ${saved} absensi disimpan!`, 'success');
+  renderAbsensi();
+}
+
+// ══════════════════════════════════════════════
+//  NILAI
+// ══════════════════════════════════════════════
+function renderNilai() {
+  const u = currentUser;
+  const tab = document.getElementById('tab-nilai');
+  if(!u) return;
+
+  function calcGrade(avg) {
+    if(avg>=90) return 'A'; if(avg>=80) return 'B'; if(avg>=70) return 'C'; return 'D';
+  }
+
+  if(u.role === 'guru') {
+    tab.innerHTML = `
+      <div class="panel-top"><div class="panel-heading">📊 Input Nilai</div><div class="panel-sub">Masukkan nilai siswa</div></div>
+      <div class="form-card">
+        <div class="form-title">✏️ Tambah / Edit Nilai</div>
+        <div class="form-row"><label>👦 NAMA SISWA</label>
+          <select id="n-siswa"><option value="">-- Pilih Siswa --</option>${dataSiswa.map(s=>`<option>${s.nama}</option>`).join('')}</select></div>
+        <div class="form-row"><label>📚 MATA PELAJARAN</label>
+          <select id="n-mapel"><option value="">-- Pilih Mapel --</option>${dataMapelList.map(m=>`<option>${m}</option>`).join('')}</select></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div class="form-row"><label>📝 TUGAS</label><input type="number" id="n-tugas" placeholder="0" min="0" max="100"></div>
+          <div class="form-row"><label>📋 UTS</label><input type="number" id="n-uts" placeholder="0" min="0" max="100"></div>
+          <div class="form-row"><label>🎓 UAS</label><input type="number" id="n-uas" placeholder="0" min="0" max="100"></div>
+        </div>
+        <button class="btn-save" onclick="simpanNilai()">💾 Simpan Nilai</button>
+      </div>
+      <div class="data-list">
+        <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--dark);margin-bottom:8px">📋 Rekap Nilai</div>
+        ${dataNilai.length===0?`<div class="empty-state"><div class="empty-emoji">📊</div><div class="empty-title">Belum ada nilai</div></div>`
+        :dataNilai.slice().reverse().slice(0,30).map(n=>{
+          const avg = Math.round((parseFloat(n.tugas||0)+parseFloat(n.uts||0)+parseFloat(n.uas||0))/3);
+          const grade = calcGrade(avg);
+          return `<div class="nilai-card">
+            <div class="nilai-student"><span>${n.siswa}</span><span class="grade-chip grade-${grade}">${grade}</span></div>
+            <div class="nilai-mapel">📚 ${n.mapel}</div>
+            <div class="nilai-grid">
+              <div class="nilai-item"><div class="nilai-val">${n.tugas||0}</div><div class="nilai-key">Tugas</div></div>
+              <div class="nilai-item"><div class="nilai-val">${n.uts||0}</div><div class="nilai-key">UTS</div></div>
+              <div class="nilai-item"><div class="nilai-val">${n.uas||0}</div><div class="nilai-key">UAS</div></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  } else {
+    const targetName = u.role==='ortu'?(ortuSelectedAnak||(u.anak||'').split(',')[0].trim()):u.nama;
+    const myNilai = dataNilai.filter(n=>n.siswa===targetName);
+    let anakSel = '';
+    if(u.role==='ortu') {
+      const anakList = (u.anak||'').split(',').map(a=>a.trim()).filter(Boolean);
+      if(anakList.length>1) anakSel = `<div class="chip-row" style="margin:12px 0 0">${anakList.map(a=>`<div class="chip${(ortuSelectedAnak||anakList[0])===a?' active':''}" onclick="ortuSelectedAnak='${a}';renderNilai()">${a}</div>`).join('')}</div>`;
+    }
+    tab.innerHTML = `
+      <div class="panel-top"><div class="panel-heading">📊 Nilai ${targetName}</div><div class="panel-sub">Rekap nilai pelajaran</div></div>
+      ${anakSel}
+      <div class="data-list">
+        ${myNilai.length===0?`<div class="empty-state"><div class="empty-emoji">📊</div><div class="empty-title">Belum ada nilai</div><div class="empty-sub">Nilai akan muncul setelah guru menginput</div></div>`
+        :myNilai.map(n=>{
+          const avg = Math.round((parseFloat(n.tugas||0)+parseFloat(n.uts||0)+parseFloat(n.uas||0))/3);
+          const grade = calcGrade(avg);
+          return `<div class="nilai-card">
+            <div class="nilai-student"><span>📚 ${n.mapel}</span><span class="grade-chip grade-${grade}">${grade} · ${avg}</span></div>
+            <div class="nilai-grid">
+              <div class="nilai-item"><div class="nilai-val">${n.tugas||0}</div><div class="nilai-key">Tugas</div></div>
+              <div class="nilai-item"><div class="nilai-val">${n.uts||0}</div><div class="nilai-key">UTS</div></div>
+              <div class="nilai-item"><div class="nilai-val">${n.uas||0}</div><div class="nilai-key">UAS</div></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+}
+
+function simpanNilai() {
+  const siswa = document.getElementById('n-siswa').value;
+  const mapel = document.getElementById('n-mapel').value;
+  const tugas = parseFloat(document.getElementById('n-tugas').value)||0;
+  const uts   = parseFloat(document.getElementById('n-uts').value)||0;
+  const uas   = parseFloat(document.getElementById('n-uas').value)||0;
+  if(!siswa||!mapel) { showToast('⚠️ Pilih siswa dan mata pelajaran',''); return; }
+  const avg = ((tugas+uts+uas)/3).toFixed(1);
+  const grade = parseFloat(avg)>=90?'A':parseFloat(avg)>=80?'B':parseFloat(avg)>=70?'C':'D';
+  const waktu = new Date().toLocaleString('id-ID');
+  const rec = { id:Date.now(), siswa, mapel, tugas, uts, uas, avg, grade, guru:currentUser.nama, waktu };
+  const idx = dataNilai.findIndex(n=>n.siswa===siswa&&n.mapel===mapel);
+  if(idx>=0) { syncDelete('nilai', dataNilai[idx].id); dataNilai[idx]=rec; }
+  else dataNilai.push(rec);
+  syncAppend('nilai', rec);
+  ss('nilai', dataNilai);
+  showToast(`✅ Nilai ${siswa} (${mapel}) disimpan!`,'success');
+  renderNilai();
+}
+
+// ══════════════════════════════════════════════
+//  INFO (Pengumuman + Artikel + E-Learning)
+// ══════════════════════════════════════════════
+let infoFilter = 'pengumuman';
+
+function renderInfo() {
+  const tab = document.getElementById('tab-info');
+  tab.innerHTML = `
+    <div class="panel-top"><div class="panel-heading">📢 Info & Materi</div></div>
+    <div class="chip-row" style="margin:12px 0 0">
+      <div class="chip${infoFilter==='pengumuman'?' active':''}" onclick="infoFilter='pengumuman';renderInfo()">📢 Pengumuman</div>
+      <div class="chip${infoFilter==='artikel'?' active':''}" onclick="infoFilter='artikel';renderInfo()">📰 Artikel</div>
+      <div class="chip${infoFilter==='elearn'?' active':''}" onclick="infoFilter='elearn';renderInfo()">💻 E-Learning</div>
+    </div>
+    <div class="data-list" id="info-list"></div>`;
+  
+  const list = document.getElementById('info-list');
+  if(infoFilter==='pengumuman') {
+    const pgm = dataPengumuman.slice().reverse();
+    list.innerHTML = pgm.length===0 ? `<div class="empty-state"><div class="empty-emoji">📢</div><div class="empty-title">Belum ada pengumuman</div></div>` :
+      pgm.map(p=>`<div class="pengumuman-card">
+        <span class="pgm-kategori pgm-${p.kategori||'info'}">${p.kategori||'info'}</span>
+        <div class="pgm-judul">${p.judul||''}</div>
+        <div class="pgm-isi">${(p.isi||'').slice(0,120)}${p.isi&&p.isi.length>120?'…':''}</div>
+        <div class="pgm-meta">📅 ${p.tanggal||''} · ✏️ ${p.penulis||''}</div>
+      </div>`).join('');
+  } else if(infoFilter==='artikel') {
+    const art = dataArtikel.slice().reverse();
+    list.innerHTML = art.length===0 ? `<div class="empty-state"><div class="empty-emoji">📰</div><div class="empty-title">Belum ada artikel</div></div>` :
+      art.map(a=>`<div class="artikel-card" onclick="openArtikelDetail(${JSON.stringify(a).replace(/"/g,'&quot;')})">
+        <div class="artikel-img">${a.foto?`<img src="${a.foto}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+          <span ${a.foto?'style="display:none"':''}>${a.emoji||'📰'}</span></div>
+        <div class="artikel-body">
+          <span class="artikel-cat">${a.kategori||'Umum'}</span>
+          <div class="artikel-judul">${a.judul||''}</div>
+          <div class="artikel-isi-preview">${a.isi||''}</div>
+          <div class="artikel-meta">📅 ${a.tanggal||''} · ✏️ ${a.penulis||''}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    const el = dataElearn.slice().reverse();
+    list.innerHTML = el.length===0 ? `<div class="empty-state"><div class="empty-emoji">💻</div><div class="empty-title">Belum ada materi</div></div>` :
+      el.map(e=>`<div class="el-card">
+        <div class="el-emoji">${e.emoji||'📚'}</div>
+        <div class="el-body">
+          <div class="el-judul">${e.judul||''}</div>
+          <div class="el-mapel">${e.mapel||''}</div>
+          <div class="el-desc">${e.desc||''}</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// ══════════════════════════════════════════════
+//  PROFILE
+// ══════════════════════════════════════════════
+function renderProfile() {
+  const u = currentUser;
+  if(!u) return;
+  const tab = document.getElementById('tab-profile');
+  const roleLabel = {guru:'👨‍🏫 Guru',ortu:'👨‍👩‍👧 Orang Tua',murid:'👦 Murid'};
+  const infoItems = u.role==='guru'?[
+    {icon:'📚',label:'Mata Pelajaran',val:u.mapel||'—'},
+    {icon:'📧',label:'Email',val:u.email||'—'},
+  ]:u.role==='ortu'?[
+    {icon:'👶',label:'Nama Anak',val:u.anak||'—'},
+    {icon:'📧',label:'Email',val:u.email||'—'},
+  ]:[
+    {icon:'🏫',label:'Kelas',val:u.kelas||'—'},
+    {icon:'📧',label:'Email',val:u.email||'—'},
+  ];
+  tab.innerHTML = `
+    <div class="profile-hero">
+      <div class="profile-avatar">${u.isMaster?'👑':u.role==='guru'?'👨‍🏫':u.role==='ortu'?'👨‍👩‍👧':'👦'}</div>
+      <div class="profile-name">${u.nama}${u.isMaster?' 👑':''}</div>
+      <span class="profile-role-badge">${u.isMaster?'Master Admin':(roleLabel[u.role]||u.role)}</span>
+    </div>
+    <div class="profile-section">
+      ${infoItems.map(i=>`<div class="profile-item" style="cursor:default">
+        <div class="profile-item-icon">${i.icon}</div>
+        <div><div class="profile-item-text">${i.label}</div><div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:2px">${i.val}</div></div>
+      </div>`).join('')}
+      <div class="profile-item" onclick="syncFromSheets()">
+        <div class="profile-item-icon">🔄</div>
+        <div class="profile-item-text">Perbarui Data</div>
+        <div class="profile-item-arrow">›</div>
+      </div>
+      <div class="profile-item" onclick="window.open('https://wa.me/6288715188778','_blank')">
+        <div class="profile-item-icon">💬</div>
+        <div class="profile-item-text">Hubungi Amih Fatih</div>
+        <div class="profile-item-arrow">›</div>
+      </div>
+      <div class="profile-item" onclick="window.open('https://rbba-alfatih.github.io/rbba/','_blank')">
+        <div class="profile-item-icon">🌐</div>
+        <div class="profile-item-text">Buka Versi Website</div>
+        <div class="profile-item-arrow">›</div>
+      </div>
+      ${u.isMaster?`<div class="profile-item" onclick="openAkunSheet()">
+        <div class="profile-item-icon">👑</div>
+        <div class="profile-item-text">Kelola Akun</div>
+        <div class="profile-item-arrow">›</div>
+      </div>`:''}
+      <button class="btn-logout" onclick="doLogout()">🚪 Keluar</button>
+    </div>
+    <div style="padding:16px;text-align:center;font-size:11px;font-weight:700;color:var(--muted)">
+      © 2025 Rumah Bermain & Belajar Al Fatih<br>Tambun Utara, Bekasi
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  SHEETS (Input forms in sheet modals)
+// ══════════════════════════════════════════════
+function openRaportSheet() {
+  const u = currentUser;
+  const targetName = u.role==='ortu'?(ortuSelectedAnak||(u.anak||'').split(',')[0].trim()):u.role==='murid'?u.nama:null;
+
+  if(u.role==='guru') {
+    // Guru: pilih siswa & tampilkan raport
+    showSheet('📋 Raport Siswa', `
+      <div class="form-row"><label>👦 PILIH SISWA</label>
+        <select id="rap-siswa" onchange="updateRaportPreview()">${dataSiswa.map(s=>`<option>${s.nama}</option>`).join('')}</select></div>
+      <div id="rap-preview" style="margin-top:16px"></div>
+      <div id="rap-izin-area" style="margin-top:12px"></div>
+    `);
+    setTimeout(()=>updateRaportPreview(), 100);
+  } else {
+    const izin = dataIzinRaport[targetName];
+    if(!izin) {
+      showSheet('📋 Raport', `<div class="empty-state"><div class="empty-emoji">🔒</div><div class="empty-title">Raport Belum Tersedia</div><div class="empty-sub">Hubungi guru untuk mengaktifkan akses raport.</div></div>`);
+      return;
+    }
+    buildRaportContent(targetName);
+  }
+}
+
+function updateRaportPreview() {
+  const sel = document.getElementById('rap-siswa');
+  if(!sel) return;
+  const nama = sel.value;
+  buildRaportContent(nama, true);
+}
+
+function buildRaportContent(nama, isGuru=false) {
+  const siswaData = dataSiswa.find(s=>s.nama===nama) || {};
+  const myNilai = dataNilai.filter(n=>n.siswa===nama);
+  const myAbs = dataAbsensi.filter(a=>a.siswa===nama);
+  const totalHadir = myAbs.filter(a=>a.status==='Hadir').length;
+  const avg = myNilai.length ? (myNilai.reduce((s,n)=>(s+parseFloat(n.avg||0)),0)/myNilai.length).toFixed(1) : 0;
+  
+  const html = `<div class="raport-card" style="margin:0">
+    <div class="raport-header-inner">
+      <div class="raport-school-name">🌟 Rumah Bermain & Belajar Al Fatih</div>
+      <div style="font-size:13px;font-weight:800;color:var(--muted);margin-top:4px">LAPORAN HASIL BELAJAR SISWA</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:2px">Semester Genap · Tahun Ajaran 2024/2025</div>
+    </div>
+    <div class="raport-info-grid">
+      <div class="raport-info-item"><label>NAMA SISWA</label><p>${nama}</p></div>
+      <div class="raport-info-item"><label>KELAS</label><p>${siswaData.kelas||'—'}</p></div>
+      <div class="raport-info-item"><label>WALI KELAS</label><p>Amih Fatih</p></div>
+      <div class="raport-info-item"><label>KEHADIRAN</label><p>${totalHadir} hari</p></div>
+    </div>
+    <table class="raport-table">
+      <tr><th>Mata Pelajaran</th><th>Tugas</th><th>UTS</th><th>UAS</th><th>Avg</th><th>Grade</th></tr>
+      ${myNilai.map(n=>`<tr><td style="text-align:left">${n.mapel}</td><td>${n.tugas||0}</td><td>${n.uts||0}</td><td>${n.uas||0}</td><td><b>${n.avg||0}</b></td><td><b>${n.grade||'—'}</b></td></tr>`).join('')}
+      <tr class="raport-avg-row"><td style="text-align:left">📊 Rata-rata</td><td colspan="3"></td><td><b>${avg}</b></td><td><b>${parseFloat(avg)>=90?'A':parseFloat(avg)>=80?'B':parseFloat(avg)>=70?'C':'D'}</b></td></tr>
+    </table>
+    <div style="margin-top:16px;background:#f8f8f8;border-radius:12px;padding:12px">
+      <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px">💬 CATATAN WALI KELAS</div>
+      <div style="font-size:13px;font-weight:700;color:var(--dark)">Siswa menunjukkan perkembangan yang sangat baik. Pertahankan semangat belajarnya!</div>
+    </div>
+  </div>`;
+
+  if(isGuru) {
+    const prev = document.getElementById('rap-preview');
+    if(prev) prev.innerHTML = html;
+    const izinArea = document.getElementById('rap-izin-area');
+    if(izinArea) {
+      const izin = dataIzinRaport[nama];
+      izinArea.innerHTML = `<button class="btn-${izin?'outline':'save'}" onclick="toggleIzinRaport('${nama}')">${izin?'🔒 Cabut Akses Raport':'🔓 Beri Akses Raport ke Ortu'}</button>`;
+    }
+  } else {
+    showSheet('📋 Raport', html);
+  }
+}
+
+function toggleIzinRaport(nama) {
+  dataIzinRaport[nama] = !dataIzinRaport[nama];
+  ss('izinRaport', dataIzinRaport);
+  sheetsPost({ action:'append', sheet:'izinRaport', data:[nama, dataIzinRaport[nama]?'1':'0'] });
+  showToast(dataIzinRaport[nama]?`✅ Raport ${nama} bisa dilihat ortu`:`🔒 Akses raport ${nama} dicabut`, 'success');
+  updateRaportPreview();
+}
+
+function openSiswaSheet() {
+  showSheet('👥 Data Siswa', `
+    <div class="form-row"><label>NAMA SISWA</label><input type="text" id="sw-nama" placeholder="Nama siswa..."></div>
+    <div class="form-row"><label>KELAS</label><select id="sw-kelas">${dataKelasList.map(k=>`<option>${k}</option>`).join('')}</select></div>
+    <div class="form-row"><label>NAMA ORANG TUA</label><input type="text" id="sw-ortu" placeholder="Nama orang tua..."></div>
+    <div class="form-row"><label>NO. HP</label><input type="tel" id="sw-hp" placeholder="0812..."></div>
+    <button class="btn-save" onclick="simpanSiswa()">➕ Tambah Siswa</button>
+    <div style="margin-top:20px">
+      ${dataSiswa.length===0?'<div style="text-align:center;padding:20px;color:var(--muted);font-weight:700">Belum ada data siswa</div>'
+      :dataSiswa.map(s=>`<div class="data-card" style="margin-bottom:8px">
+        <div class="data-card-icon" style="background:#e8f2ff">👦</div>
+        <div class="data-card-body"><div class="data-card-title">${s.nama}</div><div class="data-card-sub">${s.kelas} · ${s.ortu||'—'}</div></div>
+        <button onclick="hapusSiswa('${s.id}')" style="background:none;border:none;font-size:18px;cursor:pointer;padding:4px">🗑️</button>
+      </div>`).join('')}
+    </div>
+  `);
+}
+
+function simpanSiswa() {
+  const nama = document.getElementById('sw-nama').value.trim();
+  const kelas = document.getElementById('sw-kelas').value;
+  const ortu = document.getElementById('sw-ortu').value.trim();
+  const hp = document.getElementById('sw-hp').value.trim();
+  if(!nama) { showToast('⚠️ Nama siswa wajib diisi',''); return; }
+  const rec = { id:Date.now(), nama, kelas, ortu, hp, waktu:new Date().toLocaleString('id-ID') };
+  dataSiswa.push(rec);
+  ss('siswa', dataSiswa);
+  syncAppend('siswa', rec);
+  showToast(`✅ Siswa ${nama} ditambahkan!`,'success');
+  openSiswaSheet();
+}
+
+function hapusSiswa(id) {
+  const idx = dataSiswa.findIndex(s=>String(s.id)===String(id));
+  if(idx>=0) { syncDelete('siswa', dataSiswa[idx].id); dataSiswa.splice(idx,1); ss('siswa', dataSiswa); }
+  showToast('🗑️ Siswa dihapus','');
+  openSiswaSheet();
+}
+
+function openArtikelSheet() {
+  const art = dataArtikel.slice().reverse().slice(0,5);
+  showSheet('📰 Artikel', art.length===0?`<div class="empty-state"><div class="empty-emoji">📰</div><div class="empty-title">Belum ada artikel</div><div class="empty-sub">Artikel dapat dibuat di website.</div></div>`
+  :`<div>${art.map(a=>`<div class="artikel-card" style="margin-bottom:10px">
+    <div class="artikel-img" style="height:100px">${a.foto?`<img src="${a.foto}" alt="" onerror="this.style.display='none'">`:''}<span ${a.foto?'style="display:none"':''}>${a.emoji||'📰'}</span></div>
+    <div class="artikel-body"><div class="artikel-judul">${a.judul||''}</div><div class="artikel-meta">${a.tanggal||''}</div></div>
+  </div>`).join('')}</div>`);
+}
+
+function openElSheet() {
+  const el = dataElearn.slice().reverse();
+  showSheet('💻 E-Learning', el.length===0?`<div class="empty-state"><div class="empty-emoji">💻</div><div class="empty-title">Belum ada materi</div></div>`
+  :`<div>${el.map(e=>`<div class="el-card" style="margin-bottom:8px">
+    <div class="el-emoji">${e.emoji||'📚'}</div>
+    <div class="el-body"><div class="el-judul">${e.judul||''}</div><div class="el-mapel">${e.mapel||''}</div><div class="el-desc">${e.desc||''}</div></div>
+  </div>`).join('')}</div>`);
+}
+
+function openAkunSheet() {
+  if(!currentUser?.isMaster) { showToast('⛔ Hanya Master Admin','error'); return; }
+  showSheet('👑 Kelola Akun', `
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:12px">Untuk menambah/hapus akun lengkap, gunakan website. Di sini Anda bisa melihat daftar akun.</div>
+    ${users.map(u=>`<div class="data-card" style="margin-bottom:8px">
+      <div class="data-card-icon" style="background:${u.role==='guru'?'#e8f2ff':u.role==='ortu'?'#edf9f0':'#f5eaff'}">${u.isMaster?'👑':u.role==='guru'?'👨‍🏫':u.role==='ortu'?'👨‍👩‍👧':'👦'}</div>
+      <div class="data-card-body"><div class="data-card-title">${u.nama}${u.isMaster?' 👑':''}</div><div class="data-card-sub">${u.email} · ${u.role}</div></div>
+    </div>`).join('')}
+  `);
+}
+
+function openArtikelDetail(data) {
+  const a = typeof data === 'string' ? JSON.parse(data) : data;
+  showSheet(a.judul||'Artikel', `
+    ${a.foto?`<img src="${a.foto}" alt="" style="width:100%;border-radius:16px;margin-bottom:12px;max-height:200px;object-fit:cover" onerror="this.style.display='none'">` : `<div style="font-size:48px;text-align:center;margin-bottom:12px">${a.emoji||'📰'}</div>`}
+    <span class="artikel-cat">${a.kategori||'Umum'}</span>
+    <div style="font-size:15px;font-weight:900;color:var(--dark);margin:8px 0">${a.judul||''}</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:12px">📅 ${a.tanggal||''} · ✏️ ${a.penulis||''}</div>
+    <div style="font-size:14px;font-weight:700;color:var(--text);line-height:1.7;white-space:pre-wrap">${a.isi||''}</div>
+  `);
+}
+
+// ══════════════════════════════════════════════
+//  SHEET MODAL
+// ══════════════════════════════════════════════
+function showSheet(title, content) {
+  document.getElementById('sheet-content').innerHTML = `<div class="sheet-title">${title}</div>${content}`;
+  document.getElementById('sheet-overlay').classList.add('show');
+}
+function closeSheet() {
+  document.getElementById('sheet-overlay').classList.remove('show');
+}
+
+// ══════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════
+let toastTimer = null;
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type?' '+type:'');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.classList.remove('show'); }, 3000);
+}
+
+// ══════════════════════════════════════════════
+//  LOADING
+// ══════════════════════════════════════════════
+function showLoading(v) {
+  document.getElementById('loading').style.display = v ? 'flex' : 'none';
+}
+
+// ══════════════════════════════════════════════
+//  PULL TO REFRESH
+// ══════════════════════════════════════════════
+let ptStart = 0;
+document.querySelectorAll('.tab-content').forEach(el=>{
+  el.addEventListener('touchstart', e=>{ ptStart = e.touches[0].clientY; }, {passive:true});
+  el.addEventListener('touchend', e=>{
+    const diff = e.changedTouches[0].clientY - ptStart;
+    if(diff > 80 && el.scrollTop===0) syncFromSheets();
+  }, {passive:true});
+});
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+loadAll();
+selLoginRole('guru');
+selRegRole('ortu');
+
+// PWA install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.createElement('div');
+  btn.innerHTML = `<div style="position:fixed;bottom:calc(var(--bottom-nav-h) + 16px);right:16px;background:var(--primary);color:white;border-radius:50px;padding:10px 16px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,107,.4);z-index:999" onclick="installPWA()">📲 Install App</div>`;
+  document.body.appendChild(btn);
+  setTimeout(()=>btn.remove(), 8000);
+});
+function installPWA() {
+  if(deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; }); }
+}
+
+// Register Service Worker
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+
+// Splash → Login
+setTimeout(()=>{ showScreen('screen-login'); }, 2000);
+</script>
+</body>
+</html>

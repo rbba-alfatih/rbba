@@ -1,0 +1,22 @@
+{
+  "name": "Al Fatih - Portal Belajar",
+  "short_name": "Al Fatih",
+  "description": "Portal digital Rumah Bermain & Belajar Al Fatih",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F6F2EC",
+  "theme_color": "#FF6B6B",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/rbba-alfatih/rbba/main/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/rbba-alfatih/rbba/main/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
