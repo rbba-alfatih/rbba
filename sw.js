@@ -4,7 +4,7 @@
 //  Ganti versi CACHE_NAME setiap kali deploy baru
 // ============================================================
 
-const CACHE_NAME = 'alfatih-v3';
+const CACHE_NAME = 'alfatih-v4';
 
 const ASSETS = [
   './',
