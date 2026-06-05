@@ -1,11 +1,9 @@
 // ============================================================
 //  SERVICE WORKER - alfatih
 //  Strategi: Network First + Auto Cache Update
-//  Ganti versi CACHE_NAME setiap kali deploy baru
+//  v5 - Fix: pastikan cache lama terhapus saat deploy baru
 // ============================================================
-
-const CACHE_NAME = 'alfatih-v4';
-
+const CACHE_NAME = 'alfatih-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -43,7 +41,6 @@ self.addEventListener('activate', event => {
 //  FETCH — Network First, fallback ke Cache (offline)
 // ============================================================
 self.addEventListener('fetch', event => {
-
   // Google Apps Script & Sheets → selalu dari network, tidak di-cache
   if (
     event.request.url.includes('script.google.com') ||
