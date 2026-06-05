@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗑️ Reset Tool — RBBA Al Fatih</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #FF6FB4 0%, #FFD93D 50%, #6BCBFF 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    background: white;
+    border-radius: 28px;
+    padding: 40px 36px;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  .icon { font-size: 72px; margin-bottom: 16px; display: block; }
+  h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 28px;
+    color: #FF4D9E;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #888;
+    font-weight: 600;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .warning-box {
+    background: #FFF5F5;
+    border: 2px solid #FEB2B2;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  .warning-box p {
+    font-size: 13px;
+    font-weight: 700;
+    color: #9B2C2C;
+    margin-bottom: 6px;
+  }
+  .warning-box p:last-child { margin-bottom: 0; }
+  .warning-box .warn-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    color: #E53E3E;
+    margin-bottom: 10px;
+  }
+  .input-group { margin-bottom: 16px; text-align: left; }
+  .input-group label {
+    display: block;
+    font-weight: 800;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  .input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #eee;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.2s;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  .input-group input:focus { border-color: #FF6FB4; }
+  .btn-reset {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #FF4D9E, #FF6B6B);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 24px rgba(255,77,158,0.4);
+  }
+  .btn-reset:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(255,77,158,0.5); }
+  .btn-reset:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-back {
+    width: 100%;
+    padding: 14px;
+    background: #f5f5f5;
+    color: #888;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+  .btn-back:hover { background: #eee; color: #555; }
+  .progress {
+    display: none;
+    background: #F0FFF4;
+    border: 2px solid #9AE6B4;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .progress-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #276749;
+  }
+  .progress-item .dot { width: 8px; height: 8px; border-radius: 50%; background: #48BB78; flex-shrink: 0; }
+  #status-msg {
+    font-size: 13px;
+    font-weight: 700;
+    color: #888;
+    margin-bottom: 12px;
+    min-height: 20px;
+  }
+  .sheets-url-box {
+    background: #EBF4FF;
+    border: 2px solid #90CDF4;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .sheets-url-box label {
+    display: block;
+    font-weight: 800;
+    font-size: 12px;
+    color: #2A69AC;
+    margin-bottom: 6px;
+  }
+  .sheets-url-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1.5px solid #90CDF4;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    outline: none;
+    color: #2D3748;
+    background: white;
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <span class="icon">🗑️</span>
+  <h1>Reset Semua Data</h1>
+  <p class="subtitle">
+    Tool ini akan menghapus SEMUA data dari localStorage browser<br>
+    dan membersihkan Google Sheets RBBA Al Fatih.
+  </p>
+
+  <div class="warning-box">
+    <div class="warn-title">⚠️ Yang akan dihapus:</div>
+    <p>🗑️ Data Siswa, Absensi, Nilai, Raport</p>
+    <p>🗑️ Data SPP, Gaji Guru, Evaluasi Murid</p>
+    <p>🗑️ Artikel, E-Learning, Pengumuman</p>
+    <p>🗑️ Semua Akun (kecuali akun master bawaan)</p>
+    <p>🗑️ Calon Siswa & Izin Raport</p>
+    <p>🗑️ Cache localStorage browser ini</p>
+  </div>
+
+  <div class="sheets-url-box">
+    <label>🔗 Google Apps Script URL (dari index.html Anda)</label>
+    <input type="text" id="gas-url" 
+      value="https://script.google.com/macros/s/AKfycbzY8PvQRS7QVKwt3iJ1f-re4R2RPK6wpB2W8u4eD95A2sLUfL3PvfhYySufPkVZMkld/exec"
+      placeholder="https://script.google.com/macros/s/...">
+  </div>
+
+  <div class="input-group">
+    <label>Ketik konfirmasi: <span style="color:#FF4D9E">HAPUS SEMUA</span></label>
+    <input type="text" id="konfirmasi-input" placeholder="HAPUS SEMUA" oninput="cekKonfirmasi()">
+  </div>
+
+  <div id="status-msg"></div>
+
+  <div class="progress" id="progress-box">
+    <div class="progress-item" id="p1"><div class="dot"></div> Menghapus data localStorage...</div>
+    <div class="progress-item" id="p2" style="opacity:0.3"><div class="dot"></div> Membersihkan Sheets: siswa, absensi, nilai...</div>
+    <div class="progress-item" id="p3" style="opacity:0.3"><div class="dot"></div> Membersihkan Sheets: artikel, spp, gaji...</div>
+    <div class="progress-item" id="p4" style="opacity:0.3"><div class="dot"></div> Membersihkan Sheets: akun, evaluasi, dll...</div>
+    <div class="progress-item" id="p5" style="opacity:0.3"><div class="dot"></div> Selesai! ✅</div>
+  </div>
+
+  <button class="btn-reset" id="btn-reset" onclick="doReset()" disabled>
+    🗑️ Hapus Semua Data
+  </button>
+
+  <a href="index.html" class="btn-back">← Kembali ke Aplikasi</a>
+</div>
+
+<script>
+var SHEETS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbzY8PvQRS7QVKwt3iJ1f-re4R2RPK6wpB2W8u4eD95A2sLUfL3PvfhYySufPkVZMkld/exec';
+
+function cekKonfirmasi() {
+  var val = document.getElementById('konfirmasi-input').value;
+  var btn = document.getElementById('btn-reset');
+  var msg = document.getElementById('status-msg');
+  if (val === 'HAPUS SEMUA') {
+    btn.disabled = false;
+    msg.textContent = '✅ Konfirmasi benar. Siap untuk reset.';
+    msg.style.color = '#2D8A4E';
+  } else {
+    btn.disabled = true;
+    msg.textContent = val.length > 0 ? '❌ Ketik tepat: HAPUS SEMUA' : '';
+    msg.style.color = '#E53E3E';
+  }
+}
+
+function setProgress(step) {
+  var ids = ['p1','p2','p3','p4','p5'];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (i < step) {
+      el.style.opacity = '1';
+      el.style.color = '#276749';
+    } else if (i === step) {
+      el.style.opacity = '1';
+      el.style.color = '#2A69AC';
+    } else {
+      el.style.opacity = '0.3';
+    }
+  }
+}
+
+async function sheetsPostReset(url, payload) {
+  if (!url) return;
+  try {
+    var body = new URLSearchParams();
+    body.append('payload', JSON.stringify(payload));
+    await fetch(url, { method: 'POST', mode: 'no-cors', body: body });
+  } catch(e) { /* silent */ }
+}
+
+async function doReset() {
+  var btn = document.getElementById('btn-reset');
+  var progressBox = document.getElementById('progress-box');
+  var gasUrl = document.getElementById('gas-url').value.trim() || SHEETS_URL_DEFAULT;
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Sedang menghapus...';
+  progressBox.style.display = 'block';
+
+  // STEP 1: Hapus localStorage
+  setProgress(0);
+  var keys = [
+    'alfatih_siswa', 'alfatih_absensi', 'alfatih_nilai', 'alfatih_pengumuman',
+    'alfatih_elearn', 'alfatih_artikel', 'alfatih_spp', 'alfatih_evaluasi',
+    'alfatih_gaji', 'alfatih_absenGuruLokal', 'alfatih_users', 'alfatih_akun',
+    'alfatih_calon', 'alfatih_izinRaport', 'alfatih_kelasList', 'alfatih_mapelList',
+    'alfatih_tarifGaji', 'alfatih_potonganGaji', 'alfatih_evData2', 'alfatih__deletedIds'
+  ];
+  keys.forEach(function(key) { 
+    try { localStorage.removeItem(key); } catch(e) {}
+  });
+  await new Promise(r => setTimeout(r, 500));
+
+  // STEP 2: Clear sheets batch 1
+  setProgress(1);
+  var sheets1 = ['siswa','absensi','nilai','pengumuman','elearn'];
+  for (var s of sheets1) {
+    await sheetsPostReset(gasUrl, { action: 'clearSheet', sheet: s });
+    await new Promise(r => setTimeout(r, 200));
+  }
+  await new Promise(r => setTimeout(r, 300));
+
+  // STEP 3: Clear sheets batch 2
+  setProgress(2);
+  var sheets2 = ['artikel','spp','gaji','absenGuruLokal'];
+  for (var s of sheets2) {
+    await sheetsPostReset(gasUrl, { action: 'clearSheet', sheet: s });
+    await new Promise(r => setTimeout(r, 200));
+  }
+  await new Promise(r => setTimeout(r, 300));
+
+  // STEP 4: Clear sheets batch 3
+  setProgress(3);
+  var sheets3 = ['akun','calon','izinRaport','evaluasi'];
+  for (var s of sheets3) {
+    await sheetsPostReset(gasUrl, { action: 'clearSheet', sheet: s });
+    await new Promise(r => setTimeout(r, 200));
+  }
+  await new Promise(r => setTimeout(r, 300));
+
+  // STEP 5: Done
+  setProgress(4);
+  btn.textContent = '✅ Berhasil Dihapus!';
+  btn.style.background = 'linear-gradient(135deg, #48BB78, #38A169)';
+
+  document.getElementById('status-msg').innerHTML = 
+    '<div style="background:#F0FFF4;border:2px solid #9AE6B4;border-radius:12px;padding:14px;color:#276749;font-size:14px;font-weight:700;line-height:1.6">' +
+    '✅ <strong>Semua data berhasil dihapus!</strong><br>' +
+    '📌 localStorage browser: BERSIH<br>' +
+    '📌 Google Sheets: BERSIH<br><br>' +
+    '👉 Sekarang buka <a href="index.html" style="color:#FF4D9E;font-weight:800">index.html</a> dan mulai input data baru.' +
+    '</div>';
+
+  await new Promise(r => setTimeout(r, 1000));
+}
+</script>
+</body>
+</html>
