@@ -1674,17 +1674,31 @@ footer {
   <div class="tentang-card">
     <div class="tentang-text">
       <div class="tentang-title">🧡 Tentang Kami</div>
-      <p>Rumah Bermain dan Belajar Al Fatih hadir sebagai ruang belajar dan bermain yang menyenangkan, inspiratif, dan penuh kasih sayang bagi anak-anak usia dini. Kami percaya bahwa setiap anak adalah pribadi istimewa yang memiliki potensi besar untuk tumbuh menjadi generasi cerdas, kreatif, mandiri, dan berakhlak mulia.</p>
-      <p>Dengan menggabungkan konsep bermain sambil belajar, kami menciptakan pengalaman belajar yang aktif, edukatif, dan bermakna melalui berbagai kegiatan kreatif, eksploratif, serta pembiasaan nilai-nilai Islami &amp; keberagaman dalam kehidupan sehari-hari.</p>
-      <p>Kami berkomitmen menjadi tempat yang aman, nyaman, dan ramah anak, sehingga setiap anak dapat belajar dengan bahagia, percaya diri, dan bebas mengembangkan potensi dirinya.</p>
+      <p>Rumah Bermain &amp; Belajar Al Fatih merupakan tempat les dan belajar nonformal berbasis rumahan yang mendampingi anak-anak dalam mengembangkan kemampuan akademik dasar, karakter positif, serta rasa percaya diri melalui kegiatan belajar yang menyenangkan dan sesuai dengan tahap perkembangannya.</p>
+      <p>Didirikan dan dikelola oleh <strong>Karina Marsha, A.Md.S.I.Ak</strong>, Rumah Bermain &amp; Belajar Al Fatih mulai aktif sejak <strong>7 Juli 2023</strong> dan berkomitmen untuk menjadi lingkungan belajar yang aman, nyaman, dan ramah anak.</p>
+      <p>Kami percaya bahwa setiap anak memiliki potensi, keunikan, dan cara belajar yang berbeda. Oleh karena itu, proses belajar di sini dirancang agar anak dapat belajar dengan suasana yang hangat, menyenangkan, dan tanpa tekanan — sehingga dapat berkembang sesuai kemampuan dan kecepatannya masing-masing.</p>
+
+      <div class="tentang-program">
+        <p class="program-label">Program yang tersedia:</p>
+        <ul>
+          <li>Kelas Bermain (3–5 tahun)</li>
+          <li>Calistung (Membaca, Menulis, dan Berhitung)</li>
+          <li>Les Mata Pelajaran SD Kelas 1–6</li>
+          <li>Pendampingan Belajar dan Pengerjaan PR</li>
+          <li>Kegiatan edukatif yang mendukung tumbuh kembang anak</li>
+        </ul>
+      </div>
+
+      <p>Sebagai tempat les nonformal, kami berfokus pada pendampingan proses belajar anak, penguatan kemampuan dasar, serta membangun kebiasaan belajar yang positif.</p>
+      <p><em>Melalui pendekatan yang hangat dan kerja sama yang baik dengan orang tua, kami berharap dapat menjadi bagian dari perjalanan belajar dan tumbuh kembang setiap ananda 🤍✨</em></p>
     </div>
     <div class="tentang-img-wrap" style="background:transparent !important; border:none !important; box-shadow:none !important;">
-  <img 
-    src="https://cdn.jsdelivr.net/gh/rbba-alfatih/rbba@main/icon-512.png" 
-    alt="Logo Al Fatih" 
-    style="width: 100%; height: 100%; object-fit: contain;"
-  />
-</div>
+      <img 
+        src="https://cdn.jsdelivr.net/gh/rbba-alfatih/rbba@main/icon-512.png" 
+        alt="Logo Al Fatih" 
+        style="width: 100%; height: 100%; object-fit: contain;"
+      />
+    </div>
   </div>
 </div>
 
@@ -4839,7 +4853,50 @@ document.getElementById('abs-tanggal') && (document.getElementById('abs-tanggal'
   padding-top: 16px;
   border-top: 1px solid #F0D8EC;
 }
+/* ===== TENTANG KAMI — Program Box ===== */
+.tentang-program {
+  background: #fff0f7;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin: 12px 0 16px;
+  border: 1.5px solid rgba(255,111,180,.20);
+}
 
+.tentang-program .program-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 15px;
+  color: #FF4D9E;
+  margin: 0 0 10px;
+}
+
+.tentang-program ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tentang-program ul li {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5A4A6A;
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.tentang-program ul li::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #FF6FB4;
+  position: absolute;
+  left: 0;
+  top: 7px;
+}
 @media (max-width: 768px) {
   /* ── Header ── */
   .header-inner { padding: 10px 16px !important; gap: 8px !important; justify-content: center !important; position: relative !important; }
