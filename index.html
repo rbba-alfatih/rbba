@@ -597,13 +597,11 @@ body::after{
   margin:0 auto 48px;
   padding:0 24px;
 }
-
 .kelas-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,1fr); /* 3 → 4 */
   gap:24px;
 }
-
 .kelas-card{
   background:#fff;
   border-radius:28px;
@@ -613,20 +611,16 @@ body::after{
   display:flex;
   flex-direction:column;
 }
-
 .kelas-card:hover{
   transform:translateY(-6px);
   box-shadow:0 16px 45px rgba(0,0,0,.12);
 }
-
 .kelas-header{
   position:relative;
   overflow:hidden;
   padding:28px 26px 22px;
   color:#fff;
 }
-
-/* Lingkaran transparan */
 .kelas-header::after{
   content:'';
   position:absolute;
@@ -637,20 +631,19 @@ body::after{
   right:-70px;
   bottom:-70px;
 }
-
 /* WARNA CARD */
 .kelas-card:nth-child(1) .kelas-header{
   background:linear-gradient(135deg,#ff7465,#ff9654);
 }
-
 .kelas-card:nth-child(2) .kelas-header{
   background:linear-gradient(135deg,#5f92f5,#b06ae9);
 }
-
 .kelas-card:nth-child(3) .kelas-header{
   background:linear-gradient(135deg,#66c97d,#5f9df7);
 }
-
+.kelas-card:nth-child(4) .kelas-header{       /* ← BARU */
+  background:linear-gradient(135deg,#f9a825,#ff7043);
+}
 .kelas-emoji{
   font-size:32px;
   display:block;
@@ -658,7 +651,6 @@ body::after{
   position:relative;
   z-index:1;
 }
-
 .kelas-title{
   font-family:'Fredoka One',cursive;
   font-size:22px;
@@ -667,7 +659,6 @@ body::after{
   position:relative;
   z-index:1;
 }
-
 .kelas-subtitle{
   font-size:13px;
   font-weight:700;
@@ -675,27 +666,23 @@ body::after{
   position:relative;
   z-index:1;
 }
-
 .kelas-body{
   padding:24px;
   display:flex;
   flex-direction:column;
   flex:1;
 }
-
 .kelas-body p{
   font-size:15px !important;
   color:#777 !important;
   line-height:1.8 !important;
   margin-bottom:18px;
 }
-
 .kelas-features{
   list-style:none;
   padding:0;
   margin:0 0 22px;
 }
-
 .kelas-features li{
   display:flex;
   align-items:flex-start;
@@ -705,12 +692,10 @@ body::after{
   color:#555;
   font-weight:700;
 }
-
 .feat-icon{
   font-size:18px;
   flex-shrink:0;
 }
-
 .kelas-price-wrap{
   background:#f5efe6;
   border-radius:18px;
@@ -718,37 +703,25 @@ body::after{
   margin-top:auto;
   margin-bottom:20px;
 }
-
 .kelas-price-label{
   font-size:14px;
   color:#999;
   margin-bottom:6px;
   font-weight:700;
 }
-
 .kelas-price{
   font-family:'Fredoka One',cursive;
   font-size:24px;
 }
-
-.kelas-card:nth-child(1) .kelas-price{
-  color:#ff6b63;
-}
-
-.kelas-card:nth-child(2) .kelas-price{
-  color:#4d89f7;
-}
-
-.kelas-card:nth-child(3) .kelas-price{
-  color:#58c26f;
-}
-
+.kelas-card:nth-child(1) .kelas-price{ color:#ff6b63; }
+.kelas-card:nth-child(2) .kelas-price{ color:#4d89f7; }
+.kelas-card:nth-child(3) .kelas-price{ color:#58c26f; }
+.kelas-card:nth-child(4) .kelas-price{ color:#f9a825; } /* ← BARU */
 .kelas-price small{
   font-size:16px;
   color:#aaa;
   font-family:'Nunito',sans-serif;
 }
-
 .btn-daftar{
   display:block;
   text-align:center;
@@ -760,51 +733,28 @@ body::after{
   font-size:16px;
   transition:.3s;
 }
+.kelas-card:nth-child(1) .btn-daftar{ background:linear-gradient(135deg,#ff7465,#ff9654); }
+.kelas-card:nth-child(2) .btn-daftar{ background:linear-gradient(135deg,#5f92f5,#b06ae9); }
+.kelas-card:nth-child(3) .btn-daftar{ background:linear-gradient(135deg,#66c97d,#5f9df7); }
+.kelas-card:nth-child(4) .btn-daftar{ background:linear-gradient(135deg,#f9a825,#ff7043); } /* ← BARU */
+.btn-daftar:hover{ transform:translateY(-2px); }
 
-.kelas-card:nth-child(1) .btn-daftar{
-  background:linear-gradient(135deg,#ff7465,#ff9654);
-}
-
-.kelas-card:nth-child(2) .btn-daftar{
-  background:linear-gradient(135deg,#5f92f5,#b06ae9);
-}
-
-.kelas-card:nth-child(3) .btn-daftar{
-  background:linear-gradient(135deg,#66c97d,#5f9df7);
-}
-
-.btn-daftar:hover{
-  transform:translateY(-2px);
-}
-
-@media (max-width:900px){
+/* RESPONSIVE */
+@media (max-width:1100px){
   .kelas-grid{
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(2,1fr); /* tablet: 2 kolom */
   }
 }
-
 @media (max-width:600px){
-  .kelas-section{
-    padding:0 16px;
-  }
-
+  .kelas-section{ padding:0 16px; }
   .kelas-grid{
-    grid-template-columns:1fr;
+    grid-template-columns:1fr; /* mobile: 1 kolom */
     gap:16px;
   }
-
-  .kelas-title{
-    font-size:22px;
-  }
-
-  .kelas-price{
-    font-size:28px;
-  }
-
-  .btn-daftar{
-    font-size:16px;
-    padding:14px;
-  }
+  .kelas-title{ font-size:22px; }
+  .kelas-price{ font-size:28px; }
+  .btn-daftar{ font-size:16px; padding:14px; }
+}
 }
 
   .reward-section { max-width: 1200px; margin: 0 auto 48px; padding: 0 24px; }
@@ -1749,25 +1699,24 @@ footer {
         <div class="kelas-subtitle">Pra Calistung · Usia Pra TK</div>
       </div>
       <div class="kelas-body">
-        <p style="font-size:13px;color:#888;font-weight:600;line-height:1.6">Untuk anak usia pra TK yang belum siap calistung.</p>
+        <p style="font-size:13px;color:#888;font-weight:600;line-height:1.6">Untuk anak usia pra-sekolah yang butuh stimulasi tumbuh kembang optimal..</p>
         <ul class="kelas-features">
-          <li><span class="feat-icon">✨</span> Motorik kasar &amp; halus</li>
-          <li><span class="feat-icon">✨</span> Pengenalan huruf–angka lewat bermain</li>
-          <li><span class="feat-icon">✨</span> Worksheet ringan</li>
-          <li><span class="feat-icon">✨</span> Read aloud setiap hari</li>
-          <li><span class="feat-icon">🎒</span> Gratis tas &amp; kaos seragam</li>
+          <li><span class="feat-icon">✨</span> Stimulasi motorik kasar, halus, bahasa, pra matematika, pra menulis & membaca</li>
+          <li><span class="feat-icon">✨</span> Pengenalan huruf & angka dengan menyenangkan (Montessori × Kurikulum Merdeka)</li>
+          <li><span class="feat-icon">✨</span> Masuk 4× seminggu (Senin–Kamis)</li>
         </ul>
         <div class="kelas-price-wrap">
           <div>
             <div class="kelas-price-label">Biaya per bulan</div>
             <div class="kelas-price">Rp125.000 <small>/bulan</small></div>
+            <div style="margin-top:8px;font-size:12px;color:#999;font-weight:700">Pendaftaran: <span style="color:#ff6b63;font-weight:800">Rp50.000</span> <span style="font-weight:600">(Gratis 2 bundel worksheet)</span></div>
           </div>
         </div>
         <a href="#" class="btn-daftar" onclick="event.preventDefault();openDaftar('Kelas Bermain')">Daftar Sekarang →</a>
       </div>
     </div>
 
-    <!-- Kelas Calistung -->
+    <!-- Les Calistung -->
     <div class="kelas-card">
       <div class="kelas-header">
         <span class="kelas-emoji">✏️</span>
@@ -1777,22 +1726,23 @@ footer {
       <div class="kelas-body">
         <p style="font-size:13px;color:#888;font-weight:600;line-height:1.6">Fokus membaca, menulis, dan berhitung sesuai kemampuan anak.</p>
         <ul class="kelas-features">
-          <li><span class="feat-icon">✨</span> Belajar membaca dengan metode menyenangkan</li>
-          <li><span class="feat-icon">✨</span> Latihan menulis huruf &amp; angka</li>
-          <li><span class="feat-icon">✨</span> Berhitung dasar sesuai usia</li>
-          <li><span class="feat-icon">✨</span> Pembelajaran sesuai kemampuan anak</li>
+          <li><span class="feat-icon">✨</span> Belajar membaca</li>
+          <li><span class="feat-icon">✨</span> Latihan menulis huruf & angka</li>
+          <li><span class="feat-icon">✨</span> Latihan berhitung & mengenal konsep dasar matematika sesuai usia & kemampuan anak</li>
+          <li><span class="feat-icon">✨</span> Masuk 4× seminggu (Senin–Kamis)</li>
         </ul>
         <div class="kelas-price-wrap">
           <div>
             <div class="kelas-price-label">Biaya per bulan</div>
             <div class="kelas-price">Rp100.000 <small>/bulan</small></div>
+            <div style="margin-top:8px;font-size:12px;color:#999;font-weight:700">Pendaftaran: <span style="color:#ff6b63;font-weight:800">Rp25.000</span> <span style="font-weight:600">(Gratis 2 bundel worksheet)</span></div>
           </div>
         </div>
         <a href="#" class="btn-daftar" onclick="event.preventDefault();openDaftar('Kelas Calistung')">Daftar Sekarang →</a>
       </div>
     </div>
 
-    <!-- Kelas Mata Pelajaran -->
+    <!-- Les Mata Pelajaran -->
     <div class="kelas-card">
       <div class="kelas-header">
         <span class="kelas-emoji">📚</span>
@@ -1804,16 +1754,45 @@ footer {
         <ul class="kelas-features">
           <li><span class="feat-icon">✨</span> Pendampingan tugas sekolah</li>
           <li><span class="feat-icon">✨</span> Latihan soal terstruktur</li>
-          <li><span class="feat-icon">✨</span> Persiapan UTS &amp; UAS</li>
+          <li><span class="feat-icon">✨</span> Persiapan UTS & UAS</li>
           <li><span class="feat-icon">✨</span> Berbasis Kurikulum Merdeka</li>
+          <li><span class="feat-icon">✨</span> Masuk 4× seminggu (Senin–Kamis)</li>
         </ul>
         <div class="kelas-price-wrap">
           <div>
             <div class="kelas-price-label">Biaya per bulan</div>
             <div class="kelas-price">Rp100.000 <small>/bulan</small></div>
+            <div style="margin-top:8px;font-size:12px;color:#999;font-weight:700">Pendaftaran: <span style="color:#ff6b63;font-weight:800">Rp25.000</span></div>
           </div>
         </div>
         <a href="#" class="btn-daftar" onclick="event.preventDefault();openDaftar('Kelas Mata Pelajaran')">Daftar Sekarang →</a>
+      </div>
+    </div>
+
+    <!-- Les Mata Pelajaran (Kelas 4–6 SD) -->
+    <div class="kelas-card">
+      <div class="kelas-header">
+        <span class="kelas-emoji">🎒</span>
+        <div class="kelas-title">Les Mata Pelajaran</div>
+        <div class="kelas-subtitle">Kelas 4–6 SD · Kurikulum Merdeka</div>
+      </div>
+      <div class="kelas-body">
+        <p style="font-size:13px;color:#888;font-weight:600;line-height:1.6">Pendampingan belajar &amp; tugas, latihan soal, dan persiapan UTS/UAS berbasis Kurikulum Merdeka.</p>
+        <ul class="kelas-features">
+          <li><span class="feat-icon">✨</span> Pendampingan tugas sekolah</li>
+          <li><span class="feat-icon">✨</span> Latihan soal terstruktur</li>
+          <li><span class="feat-icon">✨</span> Persiapan UTS & UAS</li>
+          <li><span class="feat-icon">✨</span> Berbasis Kurikulum Merdeka</li>
+          <li><span class="feat-icon">✨</span> Masuk 5× seminggu (Senin–Jum'at)</li>
+        </ul>
+        <div class="kelas-price-wrap">
+          <div>
+            <div class="kelas-price-label">Iuran per bulan</div>
+            <div class="kelas-price">Rp125.000 <small>/bulan</small></div>
+            <div style="margin-top:8px;font-size:12px;color:#999;font-weight:700">Pendaftaran: <span style="color:#ff6b63;font-weight:800">Rp25.000</span></div>
+          </div>
+        </div>
+        <a href="#" class="btn-daftar" onclick="event.preventDefault();openDaftar('Les Mata Pelajaran')">Daftar Sekarang →</a>
       </div>
     </div>
 
