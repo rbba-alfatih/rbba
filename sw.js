@@ -3,7 +3,7 @@
 //  Strategi: Network First + Auto Cache Update
 //  v5 - Fix: pastikan cache lama terhapus saat deploy baru
 // ============================================================
-const CACHE_NAME = 'alfatih-v5';
+const CACHE_NAME = 'alfatih-v6';
 const ASSETS = [
   './',
   './index.html',
