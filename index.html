@@ -2249,14 +2249,23 @@ footer {
   </div>
       <div style="border-top:2px solid #FCB69F;border-bottom:2px solid #FCB69F;padding:8px 0;margin:0 0 4px;background:#FFF8F4">
         <div class="raport-title" style="margin:0;color:#E8896A">LAPORAN HASIL BELAJAR SISWA</div>
-        <div style="font-size:13px;color:#bbb;font-weight:600;margin-top:4px">Semester Genap · Tahun Ajaran 2024/2025</div>
+        <div style="font-size:13px;color:#bbb;font-weight:600;margin-top:4px">Semester Genap · Tahun Ajaran 2026/2027</div>
       </div>
     </div>
     <div class="raport-student" id="raport-info">
       <div class="raport-field"><label>Nama Siswa</label><p id="raport-nama-siswa" contenteditable="false">—</p></div>
       <div class="raport-field"><label>Kelas</label><p id="raport-kelas" contenteditable="false">—</p></div>
       <div class="raport-field"><label>Nomor Induk</label><p id="raport-nis" contenteditable="false">—</p></div>
-      <div class="raport-field no-print"><label>Wali Kelas</label><select id="raport-wali-select" onchange="updateWaliKelas(this.value)" style="padding:6px 10px;border:2px solid #FCB69F;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#444;outline:none;background:white;width:100%"><option value="Amih Fatih">Amih Fatih</option></select></div>
+      <div class="raport-field no-print">
+  <label>Wali Kelas</label>
+  <select id="raport-wali-select" onchange="updateWaliKelas(this.value)" style="padding:6px 10px;border:2px solid #FCB69F;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#444;outline:none;background:white;width:100%">
+    <option value="Amih Fatih">Amih Fatih</option>
+    <option value="Karina Marsha">Karina Marsha</option>
+    <option value="Silvi Yanah">Silvi Yanah</option>
+    <option value="Rina Tania Ningsih">Rina Tania Ningsih</option>
+    <option value="Rani Nurhayati">Rani Nurhayati</option>
+  </select>
+</div>
       <div class="raport-field print-only" id="raport-wali-print-field"><label>Wali Kelas</label><p id="raport-wali-text">Amih Fatih</p></div>
     </div>
     <table class="data-table" style="margin-bottom:20px" id="raport-nilai-table">
